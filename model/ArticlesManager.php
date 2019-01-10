@@ -31,7 +31,6 @@ class ArticlesManager extends Connexion
             $status = $row['status'];
 
         return $row;
-        }
-        
+        } 
     }
 }

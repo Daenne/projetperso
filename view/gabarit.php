@@ -12,13 +12,14 @@
 		<ul>
 			<li><a href="<?= HOST.'home'; ?>">Accueil</a></li>
 			<li><a href="<?= HOST.'articles'; ?>">Articles</a></li>
-			<li>Projets</li>
-			<li>A propos</li>
-			<li>Contact</li>
+			<li><a href="<?= HOST.'projets'; ?>">Projets</a></li>
+			<li><a href="<?= HOST.'apropos'; ?>">A propos</a></li>
+			<li><a href="<?= HOST.'contact'; ?>">Contact</a></li>
+			<li><a href="<?= HOST.'login'; ?>"">Admin</a></li>
 		</ul>
 	</nav>
+	
 <!--ma page-->
-
 <?= $contentPage; ?>
 
 	<p> DB Charlotte - 2018

@@ -5,10 +5,20 @@ class Routeur
 	private $request;
 
     private $routes = [ 
-                        "home" => ["controller" => 'HomeController', "method" =>'showHome'], 
+                        "home"     => ["controller" => 'HomeController',     "method" =>'showHome'], 
                         "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
-                        "article" => ["controller" => 'ArticlesController', "method" => 'showOneArticle'],
-                        "contact" => ["controller" => 'HomeController', "method" => 'showContact']
+
+                            "article"  => ["controller" => 'ArticlesController', "method" => 'showOneArticle'],
+                            "edit"     => ["controller" => 'ArticlesController', "method" => 'editArticle'],
+                            "delete"   => ["controller" => 'ArticlesController', "method" => 'deleteArticle'],
+
+                        "projets"  => ["controller" => 'ProjetsController',  "method" => 'showProjets'],
+                        "apropos"  => ["controller" => 'AproposController',  "method" => 'showApropos'],
+                        "contact"  => ["controller" => 'ContactController',  "method" => 'showContact'],
+
+                        "login"    => ["controller" => 'AdminController',    "method" => 'showLogin'],
+                        "logout"   => ["controller" => 'AdminController',    "method" => 'endAdmin'],
+                        "admin"    => ["controller" => 'AdminController',    "method" => 'showAdmin']
                     ]; // [nom du lien qui intégre nom du controller]
 
 	public function __construct($request)
@@ -24,6 +34,10 @@ class Routeur
 
     public function getParams() 
     {
+        $params = null;
+
+        //extract $_GET
+
         $elements = explode('/', $this->request);
         unset($elements[0]);
 
@@ -32,9 +46,15 @@ class Routeur
             $params[$elements[$i]] = $elements[$i+1];
             $i++;
         }
-        if (!isset($params)) {
-            $params = null;
+
+        //extract $_POST
+
+        if ($_POST) {
+           foreach ($_POST as $key => $value) {
+               $params[$key] = $value;
+           }
         }
+
         return $params;
     }
 

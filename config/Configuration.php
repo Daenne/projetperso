@@ -6,6 +6,7 @@ class MyAutoLoad
 {
   public static function start()
   {
+    session_start();
     spl_autoload_register(array(__CLASS__, 'autoload'));
 
     $root = $_SERVER['DOCUMENT_ROOT'];

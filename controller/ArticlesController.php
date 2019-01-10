@@ -39,4 +39,5 @@ class ArticlesController
     }
 
     //quand changement ou redirect myView->redirect('la page ou je veux redirect')
+    
 }
