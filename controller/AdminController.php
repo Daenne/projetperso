@@ -19,6 +19,13 @@ class AdminController
 
     public function showLogin($params) 
   	{
+  		extract($params);
+  		//essayer
+  		// $values = $_POST['values'];
+  		// $manager = new DevinetteManager();
+  		// $manager->create($values);
+  		// myView = new View();
+  		// myView->redirect('home');
 
   		if(isset($_SESSION['authentification']))
   		{
@@ -26,8 +33,8 @@ class AdminController
   		}
   		else 
   		{
-  			extract($params);
-  			
+
+
   			if ((isset($pseudo)) AND (isset($password))) 
   			{
   				$this->getAdminConnexion($pseudo, $password);

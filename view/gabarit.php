@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="<?= WEB; ?>style.css">
-	<title>Titre de la page</title>
+	<title><?= $pageTitle; ?></title>
 </head>
 <body>
 	<h1>HEADER</h1>

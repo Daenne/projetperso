@@ -4,7 +4,9 @@ class HomeController
 {
   public function showHome($params) 
   {
+  	$pageTitle = 'Accueil';
+
     $myView = new View('HomeView');
-    $myView->render(); 
+    $myView->render(array('pageTitle' => $pageTitle)); 
   }
 }

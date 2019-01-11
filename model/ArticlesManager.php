@@ -33,4 +33,11 @@ class ArticlesManager extends Connexion
         return $row;
         } 
     }
+
+    public function getComments($id) 
+    {
+        $comments = $this->db->prepare('SELECT id, articleid, author, comment, DATE_FORMAT(date_create, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments WHERE articleid = ? ORDER BY date_create DESC');
+        $comments->execute(array($id));
+        return $comments;
+    }
 }
