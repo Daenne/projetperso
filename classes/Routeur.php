@@ -12,6 +12,8 @@ class Routeur
                             "edit"     => ["controller" => 'ArticlesController', "method" => 'editArticle'],
                             "delete"   => ["controller" => 'ArticlesController', "method" => 'deleteArticle'],
 
+                            "addComment"=>["controller" => 'ArticlesController', "method" => 'addComment'],
+
                         "projets"  => ["controller" => 'ProjetsController',  "method" => 'showProjets'],
                         "apropos"  => ["controller" => 'AproposController',  "method" => 'showApropos'],
                         "contact"  => ["controller" => 'ContactController',  "method" => 'showContact'],

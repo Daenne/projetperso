@@ -19,7 +19,6 @@ class ArticlesController
     }
 
     public function showOneArticle($params){
-
       try {
         extract($params);
 
@@ -43,7 +42,29 @@ class ArticlesController
         echo 'Erreur : ' . $e->getMessage();
       } 
     }
+    //CREATE
 
+    public function addComment($params) 
+    {
+      extract($params);
+      $affectedLines = $this->manager->postComment($id, $author, $content);
+      try
+      {
+        if ($affectedLines === false) {
+            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"index.php?action=blog\">ici</a></p>");
+        }
+        else {
+            $myView = new View();
+            $myView->redirect('article/'. $id);
+        }
+      }
+      catch(Exception $e) 
+      { 
+        echo 'Erreur : ' . $e->getMessage();
+      } 
+    }
+
+    //READ
 
     public function getComments($params)
     {

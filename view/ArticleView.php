@@ -30,5 +30,23 @@
           </div><br/>
           <?php
           }
-          ?> 
+          ?>
+        <div>
+        <h3 >Ajouter un commentaire : </h3>
+        <form action="<?= HOST;?>addComment/id/<?= $article['id']; ?>" method ="post">
+            <div>
+              <label for="author">Pseudo</label>
+              <div>
+                <input name="author" type="text" placeholder="Exemple : ManuMano">
+              </div>
+            </div>
+            <div>
+              <label for="content">Message</label>
+              <div>
+                <textarea name="content" placeholder="J'écris ici mon commentaire"></textarea>
+              </div>
+            </div>
+            <p><button type="submit">Envoyer</button></p>
+          </form>
+      </div>
 </section>

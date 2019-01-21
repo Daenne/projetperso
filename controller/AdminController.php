@@ -19,7 +19,9 @@ class AdminController
 
     public function showLogin($params) 
   	{
-  		extract($params);
+  		var_dump($params);
+  		extract($params); //réécrit variables
+
   		//essayer
   		// $values = $_POST['values'];
   		// $manager = new DevinetteManager();
@@ -29,15 +31,18 @@ class AdminController
 
   		if(isset($_SESSION['authentification']))
   		{
-  			$this->showAdmin($params);
+  			$articlesList = $this->manager->getAdminIndex();
+  			$pageTitle = 'Administration';
+  			$myView = new View();
+            $myView->redirect('admin');
   		}
   		else 
   		{
 
 
-  			if ((isset($pseudo)) AND (isset($password))) 
+  			if ((isset($params['pseudo'])) AND (isset($params['password']))) 
   			{
-  				$this->getAdminConnexion($pseudo, $password);
+  				$this->getAdminConnexion(($params['pseudo']), ($params['password']));
   			}
   			else 
   			{	
@@ -52,6 +57,7 @@ class AdminController
 
   	public function showAdmin($params) 
   	{
+  		//var_dump($params);
   		if (isset($_SESSION['authentification'])) 
         {
            	$articlesList = $this->manager->getAdminIndex();
@@ -62,7 +68,9 @@ class AdminController
         }
         else 
         {
-          	$this->showLogin($params);
+        	$pageTitle = 'Login';
+  			$myView = new View();
+            $myView->redirect('login');
         } 
 
 
