@@ -5,6 +5,8 @@ class Routeur
 	private $request;
 
     private $routes = [ 
+                        ""         => ["controller" => 'HomeController',     "method" =>'showHome'],
+                        "index"    => ["controller" => 'HomeController',     "method" =>'showHome'],
                         "home"     => ["controller" => 'HomeController',     "method" =>'showHome'], 
                         "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
 
@@ -17,6 +19,7 @@ class Routeur
                         "projets"  => ["controller" => 'ProjetsController',  "method" => 'showProjets'],
                         "apropos"  => ["controller" => 'AproposController',  "method" => 'showApropos'],
                         "contact"  => ["controller" => 'ContactController',  "method" => 'showContact'],
+                        "mailSend" => ["controller" => 'ContactController',  "method" => 'sendMail'],
 
                         "login"    => ["controller" => 'AdminController',    "method" => 'showLogin'],
                         "logout"   => ["controller" => 'AdminController',    "method" => 'endAdmin'],

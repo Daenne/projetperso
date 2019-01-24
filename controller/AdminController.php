@@ -19,15 +19,7 @@ class AdminController
 
     public function showLogin($params) 
   	{
-  		var_dump($params);
-  		extract($params); //réécrit variables
-
-  		//essayer
-  		// $values = $_POST['values'];
-  		// $manager = new DevinetteManager();
-  		// $manager->create($values);
-  		// myView = new View();
-  		// myView->redirect('home');
+      extract($params = array('pseudo' => $params['pseudo'], 'password' => $params['password']), EXTR_OVERWRITE);
 
   		if(isset($_SESSION['authentification']))
   		{
@@ -38,7 +30,6 @@ class AdminController
   		}
   		else 
   		{
-
 
   			if ((isset($params['pseudo'])) AND (isset($params['password']))) 
   			{
@@ -72,8 +63,6 @@ class AdminController
   			$myView = new View();
             $myView->redirect('login');
         } 
-
-
   	}
 
   	public function getAdminConnexion ($pseudo, $password) 

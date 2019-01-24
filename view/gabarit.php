@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="<?= WEB; ?>logocdbfavicon.ico" />
 	<link rel="stylesheet" href="<?= WEB; ?>style.css">
 	<title><?= $pageTitle; ?></title>
 </head>

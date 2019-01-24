@@ -12,10 +12,11 @@ class ArticlesController
     public function showArticles($params) 
     {
         $articlesList = $this->manager->getArticles();
+        $pageTitle = 'Articles';
         
 
         $myView = new View('ArticlesView');
-        $myView->render(array('articlesList' => $articlesList)); 
+        $myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
     }
 
     public function showOneArticle($params){
