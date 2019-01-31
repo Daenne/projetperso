@@ -8,12 +8,32 @@ class ArticlesManager extends Connexion
         $this->db = $this->getDb();
     }
 
+    //ARTICLES
+        //CREATE
+    public function postArticle($title, $content)
+    {
+        $article = $this->db->prepare('INSERT INTO articles(title, content, date_create) VALUES (?, ?, NOW())');
+        $newArticle = $article->execute(array($title, $content));
+        return $newArticle;
+    }
+        //READ
+
     public function getArticles()
     {
+
         $sql = 'SELECT * FROM articles ORDER BY id DESC';
         $request = $this->db->prepare($sql);
         $request->execute();
+
         return $request;
+    }
+
+    public function getLastArticles()
+    {
+        $sql = ('SELECT * FROM articles ORDER BY id DESC LIMIT 3');
+        $request = $this->db->prepare($sql);
+        $request->execute();
+        return $request; 
     }
 
     public function getArticle($id)
@@ -28,13 +48,33 @@ class ArticlesManager extends Connexion
             $title = $row['title'];
             $content = $row['content'];
             $date_create = $row['date_create'];
-            $status = $row['status'];
+            //$status = $row['status'];
 
         return $row;
         } 
     }
 
-    //CREATE
+        //UPDATE
+
+    public function updateArticle ($id, $title, $content) 
+    {
+        $request = $this->db->prepare('UPDATE articles SET title = ?, content = ? WHERE id =' . $id);
+        $updateArticle = $request->execute(array($title, $content));
+        return $updateArticle;
+    }
+        //DELETE
+    
+    public function deleteArticle ($id) 
+    {
+        $request = $this->db->prepare('DELETE FROM articles WHERE id = :id');
+        $request->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $deleteArticle = $request->execute();
+        return $deleteArticle;
+    }
+
+    //COMMENTS
+
+        //CREATE
 
     public function postComment($articleid, $author, $comment) 
     {
@@ -42,7 +82,7 @@ class ArticlesManager extends Connexion
         $affectedLines = $comments->execute(array($articleid, $author, $comment));
         return $affectedLines;
     }
-    //READ
+        //READ
 
     public function getComments($id) 
     {
@@ -51,7 +91,7 @@ class ArticlesManager extends Connexion
         return $comments;
     }
 
-    //UPDATE
+        //UPDATE
 
-    //DELETE
+        //DELETE
 }

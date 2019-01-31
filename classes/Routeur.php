@@ -8,12 +8,15 @@ class Routeur
                         ""         => ["controller" => 'HomeController',     "method" =>'showHome'],
                         "index"    => ["controller" => 'HomeController',     "method" =>'showHome'],
                         "home"     => ["controller" => 'HomeController',     "method" =>'showHome'], 
-                        "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
+                        "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'], // remplaacer par showArticles
 
                             "subscribe"      => ["controller" => 'ArticlesController', "method" => 'subscribeNewsletter'],
                             "sendNewsletter" => ["controller" => 'ArticlesController', "method" => 'sendNewsletter'],
                             "unsubscribe"    => ["controller" => 'ArticlesController', "method" => 'unsubscribeNewsletter'],
+
                             "article"        => ["controller" => 'ArticlesController', "method" => 'showOneArticle'],
+                            "write"          => ["controller" => 'ArticlesController', "method" => 'addArticle'],
+                            "rewrite"        => ["controller" => 'ArticlesController', "method" => 'rewriteArticle'],
                             "edit"           => ["controller" => 'ArticlesController', "method" => 'editArticle'],
                             "delete"         => ["controller" => 'ArticlesController', "method" => 'deleteArticle'],
 

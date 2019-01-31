@@ -15,6 +15,13 @@ class Newsletter extends Connexion
         return $subscribe;
     }
 
+    public function getSubscribers() {
+
+        $sql = ('SELECT * FROM users_mail');
+        $request = $this->db->query($sql);
+        return $request;
+    }
+
     public function getSubscriber($id_newsletter) {
 
     	$subscriber = $this->db->prepare('SELECT * FROM users_mail WHERE id_newsletter = :id_newsletter');

@@ -21,7 +21,7 @@ class ContactController
 
     	extract($params);
 
-    	if ((isset($user_name)) && (isset($user_mail)) && (isset($user_message))) 
+    	if ((isset($user_name)) &&(fiter_var($user_mail, FILTER_VALIDATE_EMAIL))&& (isset($user_mail)) && (isset($user_message))) 
     	{
     		if ((!empty($user_name)) && (!empty($user_mail)) && (!empty($user_message))) 
     		{
@@ -48,9 +48,6 @@ class ContactController
     		{
     			echo "Vous n'avez pas rempli tous les champs";
     		}
-		
-
     	}
-
     }
 }

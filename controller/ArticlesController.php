@@ -11,6 +11,51 @@ class ArticlesController
         $this->newsletter = new Newsletter();
     }
 
+    //ARTICLES 
+      //CREATE
+
+      public function addArticle($params) 
+      {
+
+        extract($params);
+
+        try
+        {
+          if($_SESSION['authentification']) 
+          {
+            if ((!empty($title)) && (!empty($content))) 
+            {
+              if ($newArticle === false) 
+              {
+                throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
+              } 
+              else 
+              {
+                $newArticle = $this->manager->postArticle($title, $content);
+
+                $myView = new View('');
+                $myView->redirect('admin');
+              }
+            }
+            else
+            {
+              throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"<?= HOST;?>\">ici</a></p>");
+            }
+          }
+          else
+          {
+            throw new Exception("Vous n'avez pas les accès requis");
+            
+          } 
+        }
+        catch(Exception $e) 
+        { 
+          echo 'Erreur : ' . $e->getMessage();
+        }
+      }
+
+      //READ
+
     public function showArticles($params) 
     {
         $articlesList = $this->manager->getArticles();
@@ -21,9 +66,10 @@ class ArticlesController
         $myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
     }
 
+
     public function showOneArticle($params){
       try {
-        extract($params);
+        extract($params = array('id' => $params['id'], 'title' => $params['title'], 'content' => $params['content'], EXTR_OVERWRITE));
 
           if (isset($id)) 
           {
@@ -37,7 +83,7 @@ class ArticlesController
           }
           else 
           {
-            throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+            throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
           }
       }
       catch(Exception $e) 
@@ -45,7 +91,126 @@ class ArticlesController
         echo 'Erreur : ' . $e->getMessage();
       } 
     }
-    //CREATE
+
+      //UPDATE
+
+    public function rewriteArticle($params)
+    {
+    extract($params);
+
+      try
+      {
+        if (isset($_SESSION['authentification']))
+          {
+            if (isset($id) && $id > 0) 
+            {
+              $initialArticle = $this->manager->getArticle($id);
+              //$initialArticle = $initialArticle->fetch();
+        
+              $pageTitle = 'Modifier un article';
+
+              $myView = new View('RewriteView');
+              $myView->render(array('initialArticle' => $initialArticle, 'pagetitle' => $pageTitle));
+            }
+            else 
+            {
+              throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            }
+          }
+          else 
+          {
+            throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+          }       
+      }
+      catch(Exception $e) 
+      { 
+        echo 'Erreur : ' . $e->getMessage();
+      }
+    }
+
+    public function editArticle($params)
+    {
+      extract($params = array('id' => $params['id'], 'title' => $params['title'], 'content' => $params['content'], EXTR_OVERWRITE));
+      try
+      {
+        if (isset($_SESSION['authentification'])) 
+        {
+          if (!empty($params['title']) && !empty($params['content'])) 
+          {
+            if(isset($params['id']) && ($params['id']) > 0)
+            {
+              $updateArticle = $this->manager->updateArticle($params['id'], $params['title'], $params['content']);
+
+              if ($updateArticle === false) {
+                  throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+              }
+              else {
+                $myView = new View('');
+                $myView->redirect('admin');
+              }    
+            }
+            else
+            {
+              throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            }
+          }
+          else 
+          {
+            throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+          }
+        }
+        else 
+        {
+          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+        }
+      }
+      catch(Exception $e) 
+      { 
+        echo 'Erreur : ' . $e->getMessage();
+      }
+    }
+
+      //DELETE
+
+    public function deleteArticle ($params)
+    { 
+      extract($params);
+      try
+      {
+        if(isset($_SESSION['authentification']))
+        {
+          if (isset($id) && $id > 0) 
+          {
+            $deleteArticle = $this->manager->deleteArticle($id);
+
+            if ($deleteArticle === false) 
+            {
+              throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            } 
+            else 
+            {
+              $myView = new View();
+              $myView->redirect('admin');
+            }
+          }
+          else 
+          {
+            throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+          }
+        }
+        else 
+        {
+          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+        }
+      } 
+      catch(Exception $e) 
+      { 
+        echo 'Erreur : ' . $e->getMessage();
+      }  
+    }
+
+    //COMMENTS
+      //CREATE
 
     public function addComment($params) 
     {
@@ -54,7 +219,7 @@ class ArticlesController
       try
       {
         if ($affectedLines === false) {
-            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"index.php?action=blog\">ici</a></p>");
+            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
         }
         else {
             $myView = new View();
@@ -67,7 +232,7 @@ class ArticlesController
       } 
     }
 
-    //READ
+      //READ
 
     public function getComments($params)
     {
@@ -77,7 +242,7 @@ class ArticlesController
     }
 
 
-
+    //NEWSLETTER
 
     public function subscribeNewsletter($params)
     {
@@ -108,14 +273,46 @@ class ArticlesController
 
     public function unsubscribeNewsletter($params)
     {
+      extract($params);
 
+      $unsubscribe = $this->newsletter->stopNewsletter($params);
+
+      $myView = new View('successView');
+      $myView->render();
 
     }
 
     public function sendNewsletter($params)
     {
+      $subscribers = $this->newsletter->getSubscribers();
 
+      $articles = $this->manager->getLastArticles();
 
+      if ((isset($user_mail_newsletter)) && (filter_var($user_mail_newsletter, FILTER_VALIDATE_EMAIL))) 
+      {
+        while ($susbcriber = $subscribers->fetch()) {
+          $to = $subscriber;
+          $subject = "Nouveaux articles";
+          
+          while($article = $articles->fetch())
+            {
+              $myView = new View('NewsletterView');
+              $myView->render(array('article' => $article));
+            }
+          $header = "From : CDB \n";
+          mail($to, $subject, $article,$header);
+        }
+          
+          $pageTitle = 'Succès';
+
+          $myView = new View('successView');
+          $myView->render(array('pageTitle' => $pageTitle));
+
+        }
+        else
+        {
+          echo "Vous ne pouvez pas envoyer la newsletter";
+        }
     }
 
     //quand changement ou redirect myView->redirect('la page ou je veux redirect')

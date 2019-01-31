@@ -6,7 +6,7 @@
       <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=vf59xyjgxn48ibyemdd9z3bljo7vnd99c667lokvdam3ykfi"></script>
       <script>tinymce.init({ selector:'textarea'});</script>
 
-    <form action="" method ="post">
+    <form action="<?=HOST;?>write" method ="post">
       <div>
         <label for="title">Titre : </label>
         <div>
@@ -18,6 +18,10 @@
         <div>
           <textarea name="content"></textarea>
         </div>  
+      </div>
+      <div>
+        <label>Image : </label>
+        <input type="file" name="image">
       </div>
         <p>
           <button type="submit" name="addArticle">Ajouter</button>
@@ -53,7 +57,7 @@
       </div>
       <footer>
         <a href="<?= HOST;?>article/id/<?= $article['id'];?>">Lire la suite</a>
-        <a href="<?= HOST;?>edit/id/<?= $article['id'];?>"><button>Modifier</button></a>
+        <a href="<?= HOST;?>rewrite/id/<?= $article['id'];?>"><button>Modifier</button></a>
         <a href="<?= HOST;?>delete/id/<?= $article['id'];?>"><button>Supprimer</button></a>
       </footer>
     </div>
