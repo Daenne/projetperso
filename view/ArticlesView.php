@@ -27,5 +27,12 @@
         }
         ?>
     </article>
-  </div>        
+  </div>   
+  <div>
+    <p>M'inscrire à la newsletter</p>
+    <form action="<?= HOST; ?>subscribe" method="post">
+      <input type="email" name="user_mail_newsletter" placeholder="Votre adresse e-mail">
+      <input type="submit">
+    </form>
+  </div>     
 </section>

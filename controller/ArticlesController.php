@@ -3,10 +3,12 @@
 class ArticlesController
 {
     protected $manager;
+    protected $newsletter;
 
     public function __construct() {
 
         $this->manager = new ArticlesManager();
+        $this->newsletter = new Newsletter();
     }
 
     public function showArticles($params) 
@@ -72,6 +74,48 @@ class ArticlesController
       //extract($params);
       $comments = $this->manager->getComments($params);
       return $comments;
+    }
+
+
+
+
+    public function subscribeNewsletter($params)
+    {
+      extract($params);
+
+      $subscribe = $this->newsletter->addNewsletter($user_mail_newsletter);
+
+      try
+      {
+        if ((isset($user_mail_newsletter)) && $subscribe === true) {
+
+          $pageTitle = 'Succès';
+
+          $myView = new View('successView');
+          $myView->render(array('pageTitle' => $pageTitle));
+        }
+        else {
+
+          throw new Exception("<p>Vous n'avez pas renseigné votre adresse mail</p>");
+        }
+      }
+      catch(Exception $e) 
+      { 
+        echo 'Erreur : ' . $e->getMessage();
+      }
+
+    }
+
+    public function unsubscribeNewsletter($params)
+    {
+
+
+    }
+
+    public function sendNewsletter($params)
+    {
+
+
     }
 
     //quand changement ou redirect myView->redirect('la page ou je veux redirect')

@@ -54,7 +54,4 @@ class ArticlesManager extends Connexion
     //UPDATE
 
     //DELETE
-
-
-
 }

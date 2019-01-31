@@ -33,7 +33,10 @@ class ContactController
     			Message : $user_message \n
     			";
     			$header = "From : $user_name \n Reply-to : $user_mail \n";
+
     			mail($to, $subject, $message, $header);
+
+
 
     			$pageTitle = 'Succès';
 
