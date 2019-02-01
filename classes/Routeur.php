@@ -8,7 +8,7 @@ class Routeur
                         ""         => ["controller" => 'HomeController',     "method" =>'showHome'],
                         "index"    => ["controller" => 'HomeController',     "method" =>'showHome'],
                         "home"     => ["controller" => 'HomeController',     "method" =>'showHome'], 
-                        "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'], // remplaacer par showArticles
+                        "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
 
                             "subscribe"      => ["controller" => 'ArticlesController', "method" => 'subscribeNewsletter'],
                             "sendNewsletter" => ["controller" => 'ArticlesController', "method" => 'sendNewsletter'],
@@ -65,7 +65,6 @@ class Routeur
                $params[$key] = $value;
            }
         }
-
         return $params;
     }
 

@@ -4,6 +4,7 @@
   </h2>
 
   <p>Posté le <?= $article['date_create']; ?></p>
+  <img src="miniatures/<?= $article['id'] ?>.jpg" width="100" /><br />
   <p><?= nl2br($article['content']); ?></p>
 
   <div>

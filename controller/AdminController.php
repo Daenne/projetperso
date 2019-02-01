@@ -23,10 +23,12 @@ class AdminController
 
   		if(isset($_SESSION['authentification']))
   		{
-  			$articlesList = $this->manager->getAdminIndex();
+
+        $articlesList = $this->manager->getAdminIndex();
+
   			$pageTitle = 'Administration';
   			$myView = new View();
-            $myView->redirect('admin');
+        $myView->redirect('admin');
   		}
   		else 
   		{

@@ -23,15 +23,16 @@ class ArticlesController
         {
           if($_SESSION['authentification']) 
           {
+
             if ((!empty($title)) && (!empty($content))) 
             {
+              $newArticle = $this->manager->postArticle($title, $content);
               if ($newArticle === false) 
               {
                 throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
               } 
               else 
               {
-                $newArticle = $this->manager->postArticle($title, $content);
 
                 $myView = new View('');
                 $myView->redirect('admin');
@@ -56,20 +57,46 @@ class ArticlesController
 
       //READ
 
+    public function havePagination ($page)
+    {
+      $allPages = $this->manager->getPagination();
+
+      if(isset($page) AND !empty($page) AND $page > 0 AND $page <= $allPages) 
+      {
+        $page = intval($page);
+        $currentPage = $page;
+      } 
+      else 
+      {
+        $currentPage = 1;
+      }
+
+      return $currentPage;
+    } 
+
+
     public function showArticles($params) 
     {
-        $articlesList = $this->manager->getArticles();
-        $pageTitle = 'Articles';
-        
+      extract($params);
 
-        $myView = new View('ArticlesView');
-        $myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
+      $page = intval($page);
+      
+      $currentPage = $this->havePagination($page);
+
+      $articlesList = $this->manager->getArticles($currentPage);
+
+      $allPages = $this->manager->getPagination();
+
+      $pageTitle = 'Articles';
+
+      $myView = new View('ArticlesView');
+      $myView->render(array('articlesList' => $articlesList, 'currentPage' => $currentPage, 'allPages' => $allPages, 'pageTitle' => $pageTitle)); 
     }
 
 
     public function showOneArticle($params){
       try {
-        extract($params = array('id' => $params['id'], 'title' => $params['title'], 'content' => $params['content'], EXTR_OVERWRITE));
+        extract($params = array('id' => $params['id'], EXTR_OVERWRITE));
 
           if (isset($id)) 
           {
@@ -96,7 +123,7 @@ class ArticlesController
 
     public function rewriteArticle($params)
     {
-    extract($params);
+    extract($params = array('id' => $params['id'], 'title' => $params['title'], 'content' => $params['content'], EXTR_OVERWRITE));
 
       try
       {
@@ -114,12 +141,12 @@ class ArticlesController
             }
             else 
             {
-              throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+              throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
             }
           }
           else 
           {
-            throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
           }       
       }
       catch(Exception $e) 
@@ -142,7 +169,7 @@ class ArticlesController
               $updateArticle = $this->manager->updateArticle($params['id'], $params['title'], $params['content']);
 
               if ($updateArticle === false) {
-                  throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+                  throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
               }
               else {
                 $myView = new View('');
@@ -151,17 +178,17 @@ class ArticlesController
             }
             else
             {
-              throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+              throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
             }
           }
           else 
           {
-            throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
           }
         }
         else 
         {
-          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
         }
       }
       catch(Exception $e) 
@@ -185,7 +212,7 @@ class ArticlesController
 
             if ($deleteArticle === false) 
             {
-              throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+              throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
             } 
             else 
             {
@@ -195,12 +222,12 @@ class ArticlesController
           }
           else 
           {
-            throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
           }
         }
         else 
         {
-          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
         }
       } 
       catch(Exception $e) 
@@ -219,7 +246,7 @@ class ArticlesController
       try
       {
         if ($affectedLines === false) {
-            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
         }
         else {
             $myView = new View();

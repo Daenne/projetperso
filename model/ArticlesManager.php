@@ -3,25 +3,36 @@
 class ArticlesManager extends Connexion 
 {
     protected $db;
+    protected $articlesPerPage;
 
     public function __construct(){
         $this->db = $this->getDb();
+        $this->articlesPerPage = 3;
     }
 
     //ARTICLES
         //CREATE
     public function postArticle($title, $content)
     {
-        $article = $this->db->prepare('INSERT INTO articles(title, content, date_create) VALUES (?, ?, NOW())');
+        $article = $this->db->prepare('INSERT INTO articles(title, content, date_create, image) VALUES (?, ?, NOW(), 0)');
         $newArticle = $article->execute(array($title, $content));
         return $newArticle;
     }
         //READ
 
-    public function getArticles()
+    public function getPagination()
     {
+        $allArticlesReq = $this->db->query('SELECT * FROM articles ORDER BY id DESC');
+        $allArticles = $allArticlesReq->rowCount();
 
-        $sql = 'SELECT * FROM articles ORDER BY id DESC';
+        $allPages = ceil($allArticles/$this->articlesPerPage);
+
+        return $allPages;
+    }
+
+    public function getArticles($currentPage)
+    {
+        $sql = 'SELECT * FROM articles ORDER BY id DESC LIMIT ' .($currentPage-1)*$this->articlesPerPage . ',' . $this->articlesPerPage;
         $request = $this->db->prepare($sql);
         $request->execute();
 
@@ -63,7 +74,7 @@ class ArticlesManager extends Connexion
         return $updateArticle;
     }
         //DELETE
-    
+
     public function deleteArticle ($id) 
     {
         $request = $this->db->prepare('DELETE FROM articles WHERE id = :id');

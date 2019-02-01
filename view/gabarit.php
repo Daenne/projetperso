@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="<?= WEB; ?>logocdbfavicon.ico" />
 	<link rel="stylesheet" href="<?= WEB; ?>style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<title><?= $pageTitle; ?></title>
 </head>
 <body>
@@ -12,7 +13,7 @@
 	<nav>
 		<ul>
 			<li><a href="<?= HOST.'home'; ?>">Accueil</a></li>
-			<li><a href="<?= HOST.'articles'; ?>">Articles</a></li>
+			<li><a href="<?= HOST;?>articles/page/1">Articles</a></li>
 			<li><a href="<?= HOST.'projets'; ?>">Projets</a></li>
 			<li><a href="<?= HOST.'apropos'; ?>">A propos</a></li>
 			<li><a href="<?= HOST.'contact'; ?>">Contact</a></li>
