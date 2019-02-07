@@ -24,6 +24,12 @@
             </div>
             <div>
             <p>Posté le <?= $article['date_create']; ?>
+            <?php 
+            if (!empty($article['image']))
+            {
+              echo "<img src=". WEB . "img/article_img/" . $article['image'] . " />";
+            }
+            ;?>
             <p><?= nl2br(strip_tags($content)); ?></p>
             <a href="<?= HOST;?>article/id/<?= $article['id'];?>">Lire la suite</a>
             </div>  

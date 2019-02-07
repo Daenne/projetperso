@@ -22,7 +22,7 @@
       <div>
         <label>Image : </label>
         <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
-        <input type="file" name="miniature">
+        <input type="file" name="picture">
       </div>
         <p>
           <button type="submit" name="addArticle">Ajouter</button>
@@ -49,6 +49,13 @@
           </p>
         <div>
           <div>
+
+            <?php 
+            if (!empty($article['image']))
+            {
+              echo "<img src=". WEB . "img/article_img/" . $article['image'] . " />";
+            }
+            ;?>
             <?= $content; ?>
             <br>
             <p>Posté le <?= $article['date_create']; ?></p>

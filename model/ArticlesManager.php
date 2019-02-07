@@ -18,8 +18,15 @@ class ArticlesManager extends Connexion
         $newArticle = $article->execute(array($title, $content));
         return $newArticle;
     }
-        //READ
 
+    public function postArticleWithPicture ($title, $content, $image)
+    {
+        $article = $this->db->prepare('INSERT INTO articles(title, content, date_create, image) VALUES (?, ?, NOW(), ?)');
+        $newArticle = $article->execute(array($title, $content, $image));
+        return $newArticle;
+    }
+
+        //READ
     public function getPagination()
     {
         $allArticlesReq = $this->db->query('SELECT * FROM articles ORDER BY id DESC');

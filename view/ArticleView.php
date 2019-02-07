@@ -4,7 +4,12 @@
   </h2>
 
   <p>Posté le <?= $article['date_create']; ?></p>
-  <img src="miniatures/<?= $article['id'] ?>.jpg" width="100" /><br />
+  <?php 
+            if (!empty($article['image']))
+            {
+              echo "<img src=". WEB . "img/article_img/" . $article['image'] . " />";
+            }
+            ;?>
   <p><?= nl2br($article['content']); ?></p>
 
   <div>

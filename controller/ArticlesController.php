@@ -14,6 +14,45 @@ class ArticlesController
     //ARTICLES 
       //CREATE
 
+      public function getPicture($params)
+      {
+        extract($params);
+        if (isset($_FILES['picture']) AND (!empty($_FILES['picture']['name']))) 
+              {
+                $maxSize = 2097152; // 2Mo
+                $validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
+
+                if($_FILES['picture']['size'] <= $maxSize) 
+                {
+                  $uploadPicture = strtolower($_FILES['picture']['name']);
+                  $pictureExtension = strtolower(strrchr($_FILES['picture']['name'], '.'));
+
+                  if(in_array($pictureExtension, $validExtensions))
+                  {
+                    $way = ROOT."web/img/article_img/".$uploadPicture;
+                    $result = move_uploaded_file($_FILES['picture']['tmp_name'], "$way");
+
+                    if ($result) 
+                    {
+                      return $uploadPicture;
+                    } 
+                    else 
+                    {
+                      throw new Exception("Erreur durant l'importation de votre photo de profil");    
+                    }
+                  } 
+                  else 
+                  {
+                    throw new Exception("Votre photo doit être au format jpg, jpeg, gif ou png");  
+                  }
+                } 
+                else 
+                {
+                  throw new Exception("Votre photo ne doit pas dépasser 2Mo");
+                }
+              }
+      }
+
       public function addArticle($params) 
       {
 
@@ -26,16 +65,61 @@ class ArticlesController
 
             if ((!empty($title)) && (!empty($content))) 
             {
-              $newArticle = $this->manager->postArticle($title, $content);
-              if ($newArticle === false) 
-              {
-                throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
-              } 
-              else 
-              {
+              //if (isset($_FILES['picture']) AND (!empty($_FILES['picture']['name']))) 
+              //{
+              //  $maxSize = 2097152; // 2Mo
+              //  $validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
 
-                $myView = new View('');
-                $myView->redirect('admin');
+              //  if($_FILES['picture']['size'] <= $maxSize) 
+               // {
+               //   $uploadPicture = strtolower($_FILES['picture']['name']);
+               //   $pictureExtension = strtolower(strrchr($_FILES['picture']['name'], '.'));
+
+                //  if(in_array($pictureExtension, $validExtensions))
+                //  {
+                //     $way = ROOT."web/img/article_img/".$uploadPicture;
+                //     $result = move_uploaded_file($_FILES['picture']['tmp_name'], "$way");
+                     $picture = $this->getPicture($params);
+                     if($picture) 
+                     {
+                        $newArticle = $this->manager->postArticleWithPicture($title, $content, $picture);
+                        if ($newArticle === false) 
+                        {
+                          throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
+                        } 
+                        else 
+                        {
+                          $myView = new View('');
+                          $myView->redirect('admin');
+                        }
+                //     } 
+                //     else 
+                //     {
+                //        throw new Exception("Erreur durant l'importation de votre photo de profil");    
+                //     }
+                //  } 
+                //  else 
+                //  {
+                //    throw new Exception("Votre photo doit être au format jpg, jpeg, gif ou png");  
+                //  }
+                //} 
+                //else 
+                //{
+                //  throw new Exception("Votre photo ne doit pas dépasser 2Mo");
+                //}
+              }
+              else
+              {
+                $newArticle = $this->manager->postArticle($title, $content);
+                if ($newArticle === false) 
+                {
+                  throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
+                } 
+                else 
+                {
+                  $myView = new View('');
+                  $myView->redirect('admin');
+                }
               }
             }
             else
@@ -123,7 +207,7 @@ class ArticlesController
 
     public function rewriteArticle($params)
     {
-    extract($params = array('id' => $params['id'], 'title' => $params['title'], 'content' => $params['content'], EXTR_OVERWRITE));
+    extract($params);
 
       try
       {

@@ -17,6 +17,19 @@
           <textarea name="content"><?= nl2br(strip_tags($initialArticle['content'])); ?></textarea>
         </div>  
       </div>
+      <?php 
+            if (!empty($initialArticle['image']))
+            {
+              echo "<img src=". WEB . "img/article_img/" . $initialArticle['image'] . " />";
+            }
+            ;?>
+        <label>Image : </label>
+        <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
+        <input type="file" name="picture">
+        <p>
+          <button type="submit" name="addArticle">Ajouter</button>
+        </p>
+    </form>
       <button type="submit">Modifier</button>
 		</form>
   </div>
