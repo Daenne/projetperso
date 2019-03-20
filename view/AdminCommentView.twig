@@ -2,31 +2,21 @@
 {% block content %}
 {% include 'AdminTemplate.twig' %}
 <div class="container">
-  <div class="card-box">  
-    {% for comment in comments %}
-        <header class="card-header">
-            <p class="card-header-title">
-                <strong>{{comment.author}}</strong>
-            </p>
-        </header>
-        <div class="card-content box">
-            <div class="content">
-                le {{comment.date_create}}
-                <br>
-                {{comment.comment}}
-            </div>
-            <p class="is-warning">
-            {% if comment.warning == 0 %} 
-                Nothing
-            {% else %}
-               <strong>Signalé</strong>
-               {{comment.warning}}
-            {% endif %}
-            </p><br/>
-            <a class="button is-success" href="{{HOST}}validComment/id/{{comment.id}}">Valider</a>
-            <a class="button is-danger" href="{{HOST}}deleteComment/id/{{comment.id}}">Supprimer</a> 
-        </div>
-    {% endfor %}
+  {% for comment in comments %}  
+  <div class="box">  
+    <p class="subtitle has-text-weight-bold">{{comment.author|striptags}}</p>
+    <p class="subtitle is-size-7 is-italic">le {{comment.date_create}}</p>
+    <p class="subtitle is-size-6">{{comment.comment|striptags}}</p>
+    <p class="is-warning">
+        {% if comment.warning == 0 %} 
+            Nothing
+        {% else %}
+            <strong>Signalé</strong>
+        {% endif %}
+    </p><br/>
+    <a class="button is-success" href="{{HOST}}validComment/id/{{comment.id}}">Valider</a>
+    <a class="button is-danger" href="{{HOST}}deleteComment/id/{{comment.id}}">Supprimer</a> 
   </div>
+  {% endfor %}  
 </div>
 {% endblock %}

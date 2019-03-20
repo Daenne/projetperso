@@ -20,34 +20,33 @@
           } 
       ?>-->
       <div class="article">
-        <div class="box">
-          <article class="media">
-            <div class="media-left">
+
+        <div class="card">
+          <div class="card-image">
+            <!--<div class="media-left">-->
               {% if article.image == true %}
-                  <figure class="image is-128x128">
+                  <figure class="image is-16by9">
                   <img src="{{WEB}}img/article_img/{{article.image}}"/>
                   </figure>
               {% endif %}
-            </div>
-            <div class="media-content">
+          </div>
+            <div class="card-content">
               <div class="content">
                 <p>
                   <strong class="title">{{article.title}}</strong><br>
-                  <small>Posté le {{article.date.create}}</small>
-                  <br>
-                  <p class="subtitle is-italic">Posté le {{article.date_create}}</p>
+                  <small class="is-italic">Posté le {{article.date_create}}</small>
                   {% if article.content|length <= 200 %}
                     <p class="subtitle">{{article.content|raw}}</p>
                   {% else %}
                     <p class="subtitle">...</p>
                   {% endif %}
-                  <br/>
                   <a href="{{HOST}}article/id/{{article.id}}">Lire la suite</a>
                 </p>
               </div>
             </div>
-          </article>
+          <!--</div>-->
         </div>
+
         <br/>
       </div>        
       {% endfor %}
@@ -100,4 +99,3 @@
 <script src="{{WEB}}js/pagination.js"></script>
 </div>
 {% endblock %}
-

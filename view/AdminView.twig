@@ -48,29 +48,25 @@
   {% for article in articlesList %}
   <div class="card">
     <header class="card-header">
-      <p class="card-header-title">
-        {{article.title}}
-      </p>
+      <p class="card-header-title">{{article.title}}</p>
     </header>
-    <div class="card-content">
-      <div class="level">
+    <div class="card-image">
         {% if article.image == true %}  
-          <figure class="level-item-left image is-300x300">
+          <figure class="image is-16by9">
           <img src="{{WEB}}img/article_img/{{article.image}}" />
           </figure>
         {% endif %}
-        <div class="level-item">
-          <p class="subtitle is-italic">Posté le {{article.date_create}}</p>
+    </div>
+    <div class="card-content">
+      <div class="content"> 
           {% if article.content|length <= 200 %}
             <p class="subtitle">{{article.content|raw}}</p>
           {% else %}
             <p class="subtitle">...</p>
           {% endif %}
-        </div>
-        
-      </div>
-      
-    </div>
+          <small class="is-italic">Posté le {{article.date_create}}</small>
+      </div>  
+    </div>   
     <footer class="card-footer">
       <a class="card-footer-item" href="{{HOST}}article/id/{{article.id}}"><button class="button is-info is-small">Lire</button></a>
       <a class="card-footer-item" href="{{HOST}}rewrite/id/{{article.id}}"><button class="button is-warning is-small">Modifier</button></a>
@@ -80,7 +76,4 @@
   <br/>
   {% endfor %}  
 </div>
-        <p class="level-item">
-          <a href="{{HOST}}logout">Déconnexion</a>
-        </p>
 {% endblock %}

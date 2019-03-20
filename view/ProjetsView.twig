@@ -1,9 +1,9 @@
 {% extends "gabarit.twig" %}
 {% block content %}
 <div class="container">
-	<div class="columns is-mobile is-centered">
-		<div class="column is-half">
-			<div class="box">
+	<div class="tile is-ancestor">
+		<div class="tile is-parent is-vertical">
+			<div class="tile is-child box">
 				<p class="title is-4">Projet 1</p>
 				<p class="subtitle is-6">HTML/CSS</p>
 				<div class="level">
@@ -14,8 +14,8 @@
 					</div>
 				</div>
 				<p class="subtitle"><a class="content" href="http://www.projet1.charlotte-db.fr">Voir plus...</a></p>					
-			</div>
-			<div class="box">
+			</div><br/>
+			<div class="tile is-child box">
 				<p class="title is-4">Projet 2</p>
 				<p class="subtitle is-6">Wordpress</p>	
 				<div class="level">
@@ -28,8 +28,8 @@
 				<p class="subtitle"><a class="content" href="http://www.projet2.charlotte-db.fr">Voir plus...</a></p>
 			</div>
 		</div>
-		<div class="column is-half">
-			<div class="box">
+		<div class="tile is-parent is-vertical">
+			<div class="tile is-child box">
 				<p class="title is-4">Projet 3</p>
 				<p class="subtitle is-6">Javascript</p>	
 				<div class="level">
@@ -40,8 +40,8 @@
 					</div>
 				</div>
 				<p class="subtitle"><a class="content" href="http://www.projet3.charlotte-db.fr">Voir plus...</a></p>
-			</div>
-			<div class="box">
+			</div><br/>
+			<div class="tile is-child box">
 				<p class="title is-4">Projet 4</p>
 				<p class="subtitle is-6">Php/Mysql</p>	
 				<div class="level">
@@ -57,4 +57,3 @@
 	</div>
 </div>
 {% endblock %}
-
