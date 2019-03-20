@@ -8,6 +8,7 @@ abstract class Connexion
         try
         {
             $db = new PDO('mysql:host=localhost;dbname=projet_perso', 'root', '');
+
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db = $db;
             return $this->db;

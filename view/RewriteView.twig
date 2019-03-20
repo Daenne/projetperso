@@ -1,0 +1,45 @@
+{% extends "gabarit.twig" %}
+{% block content %}
+{% include 'AdminTemplate.twig' %}
+<div class="container">
+  <h2 class="title is-4">Modifier l'article : </h2>
+
+    <!--<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=vf59xyjgxn48ibyemdd9z3bljo7vnd99c667lokvdam3ykfi"></script>-->
+  	<script>tinymce.init({ selector:'textarea' });</script>
+
+	<form action ="{{HOST}}edit/id/{{initialArticle.id}}" method="post" enctype="multipart/form-data">
+      <div class="field">
+          <div class="control">
+              <input class="input is-primary" name="title" type="text" value="{{initialArticle.title}}"><br />
+          </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <textarea class="textarea" name="content">
+            {{initialArticle.content}}</textarea>
+        </div>  
+      </div>
+      <div class="columns">
+        <div class="column">
+            {% if initialArticle.image == true %}
+              <figure class=\"image is-300x128\">
+                <img src="{{WEB}}img/article_img/{{initialArticle.image}}" />
+              </figure>
+            {% endif %}
+        </div>
+        <div class="column field">
+          <div class="control">
+          <label class="label">Image : </label>
+          <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
+          <input class="input is-primary" type="file" name="picture">
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-info" type="submit">Modifier</button>
+        </div>
+      </div>
+	</form>
+</div>
+{% endblock %}

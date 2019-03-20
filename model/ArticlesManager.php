@@ -42,6 +42,17 @@ class ArticlesManager extends Connexion
         $sql = 'SELECT * FROM articles ORDER BY id DESC LIMIT ' .($currentPage-1)*$this->articlesPerPage . ',' . $this->articlesPerPage;
         $request = $this->db->prepare($sql);
         $request->execute();
+        //while($row = $request->fetch(PDO::FETCH_ASSOC))
+        //{
+
+        //    $id = $row['id'];
+        //    $title = $row['title'];
+        //    $content = $row['content'];
+        //    $date_create = $row['date_create'];
+        //    $image = $row['image'];
+
+        //return $row;
+        //} 
 
         return $request;
     }
@@ -51,6 +62,7 @@ class ArticlesManager extends Connexion
         $sql = ('SELECT * FROM articles ORDER BY id DESC LIMIT 3');
         $request = $this->db->prepare($sql);
         $request->execute();
+
         return $request; 
     }
 
@@ -66,7 +78,7 @@ class ArticlesManager extends Connexion
             $title = $row['title'];
             $content = $row['content'];
             $date_create = $row['date_create'];
-            //$status = $row['status'];
+            $image = $row['image'];
 
         return $row;
         } 
@@ -79,6 +91,14 @@ class ArticlesManager extends Connexion
         $request = $this->db->prepare('UPDATE articles SET title = ?, content = ? WHERE id =' . $id);
         $updateArticle = $request->execute(array($title, $content));
         return $updateArticle;
+    }
+
+    public function updateArticleWithPicture($id, $title, $content, $image)
+    {
+        $request = $this->db->prepare('UPDATE articles SET title = ?, content = ?, image = ? WHERE id =' . $id);
+        $updateArticle = $request->execute(array($title, $content, $image));
+        return $updateArticle;
+        
     }
         //DELETE
 
@@ -102,6 +122,14 @@ class ArticlesManager extends Connexion
     }
         //READ
 
+    public function getAllComments()
+    {
+        $sql = 'SELECT * FROM comments WHERE warning = 1 ORDER BY warning DESC';
+        $request = $this->db->prepare($sql);
+        $request->execute();
+        return $request;
+    }
+
     public function getComments($id) 
     {
         $comments = $this->db->prepare('SELECT id, articleid, author, comment, DATE_FORMAT(date_create, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments WHERE articleid = ? ORDER BY date_create DESC');
@@ -111,5 +139,28 @@ class ArticlesManager extends Connexion
 
         //UPDATE
 
+    public function warningComment($id)
+    {
+        $request = $this->db->prepare('UPDATE comments SET warning = 1 WHERE id =' . $id);
+        $updateComment = $request->execute();
+        return $updateComment;
+    }
+
+    public function validComment($id)
+    {
+        $request = $this->db->prepare('UPDATE comments SET warning = 0 WHERE id =:id');
+        $request->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $updateComment = $request->execute();
+        return $updateComment;
+    }
+
         //DELETE
+
+    public function deleteComment ($id) 
+    {
+        $request = $this->db->prepare('DELETE FROM comments WHERE id =:id');
+        $request->bindValue(':id', (int) $id, PDO::PARAM_INT);
+        $deleteComment = $request->execute();
+        return $deleteArticle;
+    }
 }

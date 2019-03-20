@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" href="{{WEB}}img/logocdbfavicon.ico" />
+	<link rel="stylesheet" href="{{WEB}}style/styleGenerate.css">
+
+	<link rel="stylesheet" type="text/css" href="{{WEB}}style/jquery-ui.theme.min.css"  media="screen" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+	
+	<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey={{tinyKey}}"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{{WEB}}js/jquery-ui.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+	
+	<title>{{pageTitle}}</title>
+{% endblock %}	
+</head>
+<body>
+<header class="hero is-primary">
+{% block header %}
+	<div class="hero-body">
+    	<nav class="container">
+      		<div class="level">
+          		<a href="#" class="level-left has-text-weight-bold">
+            		<h1 class="title">CDB</h1>
+          		</a>
+          		<div class="level-right">
+            		<a class="level-item has-text-centered" href="{{HOST}}home">Accueil</a>
+					<a class="level-item has-text-centered" href="{{HOST}}articles/page/1">Articles</a>
+					<a class="level-item has-text-centered" href="{{HOST}}projets">Projets</a>
+					<a class="level-item has-text-centered" href="{{HOST}}apropos">A propos</a>
+					<a class="level-item has-text-centered" href="{{HOST}}contact">Contact</a>
+					<a class="level-item has-text-centered" href="{{HOST}}login">Admin</a>
+          		</div>
+      		</div>
+    	</nav>
+    </div>
+{% endblock %}
+</header>	
+
+<!--ma page-->
+<section class="section">
+{% block content %}
+{% endblock %}
+{% block alert %}
+	<!--Message alert-->
+	<div id="dialog-confirm" title="Confirmation de la suppression" style="display:none;">
+	  <p>
+	    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	    Etes-vous sûr de vouloir supprimer cet élément ?
+	    </p>
+	</div>
+
+	<div id="dialog-message" title="Confirmation de signalement" style="display:none;">
+		<p>
+		<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 20px 0;"></span>
+		Êtes-vous sûr de vouleur signaler ce commentaire?
+		</p>
+	</div>
+{% endblock %}	
+</section>
+
+
+
+<!--<?php include(VIEW.'alertboxView.php');?>-->
+
+<footer class="footer">
+{% block footer %}
+	<p class="subtitle is-6 has-text-centered"> DB Charlotte - 2018
+		Site hébergé par 1&1 Internet SARL 7 place de la Gare BP 70109 57201 Sarreguemines Cedex</p>
+{% endblock %}
+</footer>
+</body>
+</html>

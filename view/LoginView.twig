@@ -1,0 +1,32 @@
+{% extends "gabarit.twig" %}
+{% block content %}
+<div class="container">
+  <h1 class="title has-text-centered">Espace administrateur</h2>
+    <div class="columns is-mobile is-centered">
+      <div class="column is-half">
+        <form action="{{HOST}}login" method="post">
+          <div class="control">
+            <div class="field">
+              <label class="label">Identifiant : </label>
+              <input class="input" type="text" name="pseudo" placeholder="Votre pseudo">
+            </div>
+          </div>
+          <div class="control">
+            <div class="field">
+              <label class="label">Mot de passe : </label>
+              <input class="input" type="password" name="password" placeholder="Votre mot de passe">
+            </div>
+          </div><br/>
+          <div class="control">
+            <div class="field">
+              <button class="button is-info">Valider</button>
+              <!--<input class="input" type="submit" name="addAdminConnexion" value="Valider">-->
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <br/>
+    <p class="subtitle has-text-centered">Cette page est réservée à l'administration du blog</p>
+</div> 
+{% endblock %}

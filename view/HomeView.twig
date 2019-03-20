@@ -1,0 +1,64 @@
+{% extends "gabarit.twig" %}
+{% block content %}<script>$(document).ready(function(){$('.slider').bxSlider();});</script>
+<header class="hero">
+	<div class="slider">
+		<div>
+			<figure class="image is-centered">
+				<img src="{{WEB}}img/cdb_projets.jpg" alt="Photo projets CDB">
+				<figcaption class="title has-text-centered">
+					<br/>Créatrice de projet <a href="{{HOST}}projets"><button class="button is-rounded is-outlined is-primary">Ici</button></a>
+				</figcaption>	
+			</figure>
+		</div>
+		<div>
+			<figure class="image">
+				<img src="{{WEB}}img/cdb_articles.jpg" alt="Photo articles CDB">
+				<figcaption class="title has-text-centered">
+					<br/>J'essaye de faire quelques tutos! <a href="{{HOST}}articles/page/1"><button class="button is-rounded is-outlined is-primary">Là</button></a>
+				</figcaption>	
+			</figure>
+		</div>
+	</div>
+</header>
+
+<section class="hero is-white">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns has-text-centered">
+                <div class="column is-half">
+                    <div class="subtitle">
+                        <span class="icon has-text-primary">
+                            <i class="far fa-newspaper fas fa-lg"></i>      
+                        </span>
+                        <pre class="has-text-weight-bold is-size-5">Actualités web</pre>
+                        <p class="subtitle is-size-6">Tenez vous informé des derniers tutos!</p>
+                    </div>
+                    <div class="subtitle">
+                        <span class="icon has-text-primary">
+                            <i class="fas fa-project-diagram fas fa-lg"></i>
+                        </span>
+                        <pre class="has-text-weight-bold is-size-5">Portfolio</pre>
+                        <p class="subtitle is-size-6">Venez découvrir les différents projets sur lesquels j'ai déjà pu travailler.</p>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="subtitle">
+                        <span class="icon has-text-primary">
+                            <i class="fas fa-id-badge fas fa-lg"></i>   
+                        </span>
+                        <pre class="has-text-weight-bold is-size-5">Web développeuse</pre>
+                        <p class="subtitle is-size-6">Une petite parenthèse pour en apprendre un peu plus sur l'auteur du site.</p>
+                    </div>
+                    <div class="subtitle">
+                        <span class="icon has-text-primary">
+                            <i class="fas fa-envelope fas fa-lg"></i>
+                        </span>
+                        <pre class="has-text-weight-bold is-size-5">Question</pre>
+                        <p class="subtitle is-size-6">Un devis? Besoin d'une information? N'hésitez pas à me contacter!</p>
+                    </div>
+                </div>            
+            </div>        
+        </div>
+	</div>
+</section>
+{% endblock %}

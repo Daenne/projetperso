@@ -1,12 +1,17 @@
 <?php
 
-class ProjetsController 
+class ProjetsController extends Controller
 {
 	public function showProjets($params)
     {
     	$pageTitle = 'Projets';
 
-        $myView = new View('ProjetsView');
-        $myView->render(array('pageTitle' => $pageTitle));
+    	$this->render('ProjetsView.twig', array(
+            'pageTitle' => $pageTitle
+        ));
+
+
+        //$myView = new View('ProjetsView');
+        //$myView->render(array('pageTitle' => $pageTitle));
     }
 }

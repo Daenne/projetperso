@@ -1,0 +1,86 @@
+{% extends "gabarit.twig" %}
+{% block content %}
+{% include 'AdminTemplate.twig' %}
+<div class="container"> 
+  <h2 class="title is-4">Ajouter un article : </h2>
+
+    <script>tinymce.init({ selector:'textarea'});</script>
+
+  <form action="{{HOST}}write" method ="post" enctype="multipart/form-data">
+    <div class="field">
+      <div class="control">
+        <label class="label" for="title">Titre : </label>
+        <input class="input is-primary" name="title" type="text">
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <label class="label" for="content">Article : </label>
+        <textarea class="textarea" name="content"></textarea>
+      </div>  
+    </div>
+    <div class="field">
+      <p class="control">
+        <label class="label">Image : </label>
+        <input type="hidden" name="MAX_FILE_SIZE" value="20971520" />
+        <input class="input is-primary" type="file" name="picture">          
+      </p><br/>
+      <p class="control">
+        <button class="button is-info" type="submit" name="addArticle">Ajouter</button>
+      </p>        
+    </div>
+  </form><br/>
+
+  <!--<?php 
+    while ($article = $articlesList->fetch()) { 
+
+      if (strlen($article['content']) <= 200)
+      {
+        $content = $article['content'];
+      }
+      else
+      {
+        $begin = substr($article['content'], 0, 200);
+        $begin = substr($begin, 0, strrpos($begin, ' ')) . '...';
+        $content = $begin;
+      } 
+  ?>-->
+  {% for article in articlesList %}
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        {{article.title}}
+      </p>
+    </header>
+    <div class="card-content">
+      <div class="level">
+        {% if article.image == true %}  
+          <figure class="level-item-left image is-300x300">
+          <img src="{{WEB}}img/article_img/{{article.image}}" />
+          </figure>
+        {% endif %}
+        <div class="level-item">
+          <p class="subtitle is-italic">Posté le {{article.date_create}}</p>
+          {% if article.content|length <= 200 %}
+            <p class="subtitle">{{article.content|raw}}</p>
+          {% else %}
+            <p class="subtitle">...</p>
+          {% endif %}
+        </div>
+        
+      </div>
+      
+    </div>
+    <footer class="card-footer">
+      <a class="card-footer-item" href="{{HOST}}article/id/{{article.id}}"><button class="button is-info is-small">Lire</button></a>
+      <a class="card-footer-item" href="{{HOST}}rewrite/id/{{article.id}}"><button class="button is-warning is-small">Modifier</button></a>
+      <a class="confirmModal card-footer-item" data-toggle="confirmation" href="{{HOST}}delete/id/{{article.id}}"><button class="button is-danger is-small">Supprimer</button></a>
+    </footer>
+  </div>
+  <br/>
+  {% endfor %}  
+</div>
+        <p class="level-item">
+          <a href="{{HOST}}logout">Déconnexion</a>
+        </p>
+{% endblock %}

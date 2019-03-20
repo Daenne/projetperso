@@ -1,0 +1,65 @@
+{% extends "gabarit.twig" %}
+{% block content %}
+<div class="container">
+  <div class="columns">
+
+    <div class="column is-three-third">
+      <h2 class="title">{{article.title|striptags}}</h2>
+      <p class="subtitle is-5 is-italic">Posté le {{article.date_create}}</p>
+        {% if article.image == true %}
+          <figure class="media-centered image ">
+          <img src="{{WEB}}img/article_img/{{article.image}}" />
+          </figure>
+        {% endif %}
+      <p class="subtitle">{{article.content|raw}}</p>
+    </div>  
+
+    <div class="column is-one-third">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent is-vertical">
+
+          <div class="tile is-child box">
+            <h3 class="title is-6">Ajouter un commentaire : </h3>
+            <form action="{{HOST}}addComment/id/{{article.id}}" method ="post">
+              <div class="field">
+                <div class="control">
+                  <label class="label" for="author">Pseudo</label>
+                  <input class="input is-primary" name="author" type="text" placeholder="Exemple : ManuMano">                  
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <label class="label" for="content">Message</label>
+                  <textarea class="textarea" name="content" placeholder="J'écris ici mon commentaire"></textarea>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <button class="button is-info" type="submit">Envoyer</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="columns">
+    <div class="column">
+      <h3 class="title is-6">Commentaires : </h3>
+        {% for comment in comments %}
+         <!-- while ($comment = $comments->fetch()){
+        ?>-->
+      <div class="box">
+          <p class="subtitle has-text-weight-bold">{{comment.author|striptags}}</p>
+          <p class="subtitle is-size-7 is-italic">le {{comment.comment_date_fr}}</p>
+          <p class="subtitle is-size-6">{{comment.comment|striptags}}</p>
+          <a class="messageModal" href="{{HOST}}warningComment/id/{{comment.id}}"><button class="button is-warning">Signaler</button></a>
+      </div>
+        {% endfor %}       
+    </div>
+  </div>
+</div>
+<script src="{{WEB}}js/alertbox.js"></script>
+{% endblock %}
+

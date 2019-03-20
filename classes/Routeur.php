@@ -1,6 +1,6 @@
 <?php
 
-class Routeur
+class Routeur extends Controller
 {
 	private $request;
 
@@ -11,8 +11,6 @@ class Routeur
                         "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
 
                             "subscribe"      => ["controller" => 'ArticlesController', "method" => 'subscribeNewsletter'],
-                            "sendNewsletter" => ["controller" => 'ArticlesController', "method" => 'sendNewsletter'],
-                            "unsubscribe"    => ["controller" => 'ArticlesController', "method" => 'unsubscribeNewsletter'],
 
                             "article"        => ["controller" => 'ArticlesController', "method" => 'showOneArticle'],
                             "write"          => ["controller" => 'ArticlesController', "method" => 'addArticle'],
@@ -20,17 +18,22 @@ class Routeur
                             "edit"           => ["controller" => 'ArticlesController', "method" => 'editArticle'],
                             "delete"         => ["controller" => 'ArticlesController', "method" => 'deleteArticle'],
 
-                            "addComment"=>["controller" => 'ArticlesController', "method" => 'addComment'],
+                            "addComment"     => ["controller" => 'ArticlesController', "method" => 'addComment'],
+                            "warningComment"=> ["controller" => 'ArticlesController', "method" => 'signaledComment'],
 
                         "projets"  => ["controller" => 'ProjetsController',  "method" => 'showProjets'],
-                        "apropos"  => ["controller" => 'AproposController',  "method" => 'showApropos'],
+                        "apropos"  => ["controller" => 'AProposController',  "method" => 'showApropos'],
                         "contact"  => ["controller" => 'ContactController',  "method" => 'showContact'],
                         "mailSend" => ["controller" => 'ContactController',  "method" => 'sendMail'],
 
-                        "login"    => ["controller" => 'AdminController',    "method" => 'showLogin'],
-                        "logout"   => ["controller" => 'AdminController',    "method" => 'endAdmin'],
-                        "admin"    => ["controller" => 'AdminController',    "method" => 'showAdmin']
-                    ]; // [nom du lien qui intégre nom du controller]
+                        "login"         => ["controller" => 'AdminController',    "method" => 'showLogin'],
+                        "logout"        => ["controller" => 'AdminController',    "method" => 'endAdmin'],
+                        "admin"         => ["controller" => 'AdminController',    "method" => 'showAdmin'],
+                        
+                        "adminComment"  => ["controller" => 'ArticlesController', "method" => 'getAllComments'],
+                        "deleteComment" => ["controller" => 'ArticlesController', "method" => 'deleteComment'],
+                        "validComment"  => ["controller" => 'ArticlesController', "method" => 'acceptedComment']
+                    ]; // [url name who gives controller name]
 
 	public function __construct($request)
 	{
@@ -74,18 +77,29 @@ class Routeur
         $params = $this->getParams();
 
     //$request = $this->request;
-    if(key_exists($route, $this->routes)) 
-    {
-        $controller = $this->routes[$route]['controller'];
-        $method = $this->routes[$route]['method'];
+        try
+        {
+            if(key_exists($route, $this->routes)) 
+            {
+                $controller = $this->routes[$route]['controller'];
+                $method = $this->routes[$route]['method'];
 
-        $currentController = new $controller();
-        $currentController->$method($params);
-    }
-    else 
-    {
-        echo "Erreur 404";
-    }
+                $currentController = new $controller();
+                $currentController->$method($params);
+            }
+            else 
+            {
+                throw new Exception(
+                    "<br/><p class=\"container has-text-centered has-text-weight-bold\"><span class=\"is-size-1\">404</span><br/>Retour à la page d'accueil <a href=\"home\">ici</a></p>",
+                    $this->render('Error.twig') 
+            );   
+            }
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+
 	}
 }
 

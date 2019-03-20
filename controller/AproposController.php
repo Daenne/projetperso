@@ -1,12 +1,17 @@
 <?php
 
-class AproposController 
+class AProposController extends Controller
 {
+
 	public function showApropos($params)
     {
     	$pageTitle = 'A propos';
 
-        $myView = new View('AproposView');
-        $myView->render(array('pageTitle' => $pageTitle));
+    	$this->render('AProposView.twig', array(
+            'pageTitle' => $pageTitle
+        ));
+
+        //$myView = new View('AproposView');
+        //$myView->render(array('pageTitle' => $pageTitle));
     }
 }

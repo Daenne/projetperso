@@ -1,6 +1,6 @@
 <?php
 
-class ArticlesController
+class ArticlesController extends Controller
 {
     protected $manager;
     protected $newsletter;
@@ -8,49 +8,68 @@ class ArticlesController
     public function __construct() {
 
         $this->manager = new ArticlesManager();
-        $this->newsletter = new Newsletter();
+        //$this->newsletter = new Newsletter();
     }
 
-    //ARTICLES 
+// AJOUT MENU ARTCILES /COM
+    /////ARTICLES 
       //CREATE
 
       public function getPicture($params)
       {
         extract($params);
-        if (isset($_FILES['picture']) AND (!empty($_FILES['picture']['name']))) 
+
+        try
+        {
+          if (isset($_FILES['picture']) AND (!empty($_FILES['picture']['name']))) 
+          {
+            $maxSize = 20971520; // 2Mo
+            $validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
+
+            if($_FILES['picture']['size'] <= $maxSize) 
+            {
+              $uploadPicture = strtolower($_FILES['picture']['name']);
+              $pictureExtension = strtolower(strrchr($_FILES['picture']['name'], '.'));
+
+              if(in_array($pictureExtension, $validExtensions))
               {
-                $maxSize = 2097152; // 2Mo
-                $validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
+                $way = ROOT."web/img/article_img/".$uploadPicture;
 
-                if($_FILES['picture']['size'] <= $maxSize) 
+                $result = move_uploaded_file($_FILES['picture']['tmp_name'], "$way");
+
+                if ($result) 
                 {
-                  $uploadPicture = strtolower($_FILES['picture']['name']);
-                  $pictureExtension = strtolower(strrchr($_FILES['picture']['name'], '.'));
-
-                  if(in_array($pictureExtension, $validExtensions))
-                  {
-                    $way = ROOT."web/img/article_img/".$uploadPicture;
-                    $result = move_uploaded_file($_FILES['picture']['tmp_name'], "$way");
-
-                    if ($result) 
-                    {
-                      return $uploadPicture;
-                    } 
-                    else 
-                    {
-                      throw new Exception("Erreur durant l'importation de votre photo de profil");    
-                    }
-                  } 
-                  else 
-                  {
-                    throw new Exception("Votre photo doit être au format jpg, jpeg, gif ou png");  
-                  }
+                  return $uploadPicture;
                 } 
                 else 
                 {
-                  throw new Exception("Votre photo ne doit pas dépasser 2Mo");
+                  throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Erreur durant l'importation de votre photo de profil.</p>",
+                  $this->render('Error.twig') 
+                 );   
                 }
+              } 
+              else 
+              {
+                throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Votre photo doit être au format jpg, jpeg, gif ou png.</p>",
+                  $this->render('Error.twig') 
+                  );  
               }
+            } 
+            else 
+            {
+              throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Votre photo ne doit pas dépasser 2Mo.</p>",
+                  $this->render('Error.twig') 
+                );
+            }
+          }
+        }
+        catch(Exception $e) 
+        {
+          echo $e->getMessage();
+        }
       }
 
       public function addArticle($params) 
@@ -65,77 +84,58 @@ class ArticlesController
 
             if ((!empty($title)) && (!empty($content))) 
             {
-              //if (isset($_FILES['picture']) AND (!empty($_FILES['picture']['name']))) 
-              //{
-              //  $maxSize = 2097152; // 2Mo
-              //  $validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
-
-              //  if($_FILES['picture']['size'] <= $maxSize) 
-               // {
-               //   $uploadPicture = strtolower($_FILES['picture']['name']);
-               //   $pictureExtension = strtolower(strrchr($_FILES['picture']['name'], '.'));
-
-                //  if(in_array($pictureExtension, $validExtensions))
-                //  {
-                //     $way = ROOT."web/img/article_img/".$uploadPicture;
-                //     $result = move_uploaded_file($_FILES['picture']['tmp_name'], "$way");
-                     $picture = $this->getPicture($params);
-                     if($picture) 
-                     {
-                        $newArticle = $this->manager->postArticleWithPicture($title, $content, $picture);
-                        if ($newArticle === false) 
-                        {
-                          throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
-                        } 
-                        else 
-                        {
-                          $myView = new View('');
-                          $myView->redirect('admin');
-                        }
-                //     } 
-                //     else 
-                //     {
-                //        throw new Exception("Erreur durant l'importation de votre photo de profil");    
-                //     }
-                //  } 
-                //  else 
-                //  {
-                //    throw new Exception("Votre photo doit être au format jpg, jpeg, gif ou png");  
-                //  }
-                //} 
-                //else 
-                //{
-                //  throw new Exception("Votre photo ne doit pas dépasser 2Mo");
-                //}
+              $picture = $this->getPicture($params);
+              if($picture) 
+              {
+                $newArticle = $this->manager->postArticleWithPicture($title, $content, $picture);
+                if ($newArticle === false) 
+                {
+                  throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible d'ajouter l'article.</p>",
+                  $this->render('Error.twig') 
+                  );
+                } 
+                else 
+                {
+                  $this->redirect('admin');
+                }
               }
               else
               {
                 $newArticle = $this->manager->postArticle($title, $content);
                 if ($newArticle === false) 
                 {
-                  throw new Exception("<p>Impossible d'ajouter l'article. Retour à la page d'accueil <a href=\"<?= HOST; ?>\">ici</a></p>");
+                  throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible d'ajouter l'article.</p>",
+                  $this->render('Error.twig') 
+                  );
                 } 
                 else 
                 {
-                  $myView = new View('');
-                  $myView->redirect('admin');
+                  $this->redirect('admin');
                 }
               }
             }
             else
             {
-              throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"<?= HOST;?>\">ici</a></p>");
+              throw new Exception(
+                  "<br/><p class=\"container has-text-centered has-text-weight-bold\">Tous les champs ne sont pas remplis.</p>",
+                  $this->render('Error.twig') 
+                );
             }
           }
           else
           {
-            throw new Exception("Vous n'avez pas les accès requis");
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis</p>",
+              $this->render('Error.twig') 
+            );
             
           } 
         }
         catch(Exception $e) 
         { 
-          echo 'Erreur : ' . $e->getMessage();
+          echo $e->getMessage();
         }
       }
 
@@ -167,14 +167,21 @@ class ArticlesController
       
       $currentPage = $this->havePagination($page);
 
-      $articlesList = $this->manager->getArticles($currentPage);
+      $articlesList = $this->manager->getArticles($currentPage); 
 
       $allPages = $this->manager->getPagination();
 
       $pageTitle = 'Articles';
 
-      $myView = new View('ArticlesView');
-      $myView->render(array('articlesList' => $articlesList, 'currentPage' => $currentPage, 'allPages' => $allPages, 'pageTitle' => $pageTitle)); 
+      $this->render('ArticlesView.twig', array(
+            'pageTitle' => $pageTitle,
+            'articlesList' => $articlesList,
+            'currentPage' => $currentPage,
+            'allPages' => $allPages
+      ));
+
+      //$myView = new View('ArticlesView');
+      //$myView->render(array('articlesList' => $articlesList, 'currentPage' => $currentPage, 'allPages' => $allPages, 'pageTitle' => $pageTitle)); 
     }
 
 
@@ -182,24 +189,32 @@ class ArticlesController
       try {
         extract($params = array('id' => $params['id'], EXTR_OVERWRITE));
 
-          if (isset($id)) 
+          if ((isset($id)) && is_numeric($id))
           {
             $article = $this->manager->getArticle($id);
             //$article = $article->fetch();
             $pageTitle = $article['title'];
             $comments = $this->getComments($id);
-
-            $myView = new View('ArticleView');
-            $myView->render(array('article' => $article, 'pageTitle' => $pageTitle, 'comments' => $comments));
+            
+            $this->render('ArticleView.twig', array(
+                  'pageTitle' => $pageTitle,
+                  'article' => $article,
+                  'comments' => $comments
+              ));
+            //$myView = new View('ArticleView');
+            //$myView->render(array('article' => $article, 'pageTitle' => $pageTitle, 'comments' => $comments));
           }
           else 
           {
-            throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"<?= HOST;?>home\">ici</a></p>");
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de billet envoyé</p>",
+              $this->render('Error.twig') 
+            );
           }
       }
       catch(Exception $e) 
       { 
-        echo 'Erreur : ' . $e->getMessage();
+        echo $e->getMessage();
       } 
     }
 
@@ -216,26 +231,39 @@ class ArticlesController
             if (isset($id) && $id > 0) 
             {
               $initialArticle = $this->manager->getArticle($id);
+              $tinyKey = 'vf59xyjgxn48ibyemdd9z3bljo7vnd99c667lokvdam3ykfi';
               //$initialArticle = $initialArticle->fetch();
         
               $pageTitle = 'Modifier un article';
 
-              $myView = new View('RewriteView');
-              $myView->render(array('initialArticle' => $initialArticle, 'pagetitle' => $pageTitle));
+              $this->render('RewriteView.twig', array(
+                    'pageTitle' => $pageTitle,
+                    'initialArticle' => $initialArticle,
+                    'tinyKey' => $tinyKey
+                ));
+
+              //$myView = new View('RewriteView');
+              //$myView->render(array('initialArticle' => $initialArticle, 'pagetitle' => $pageTitle));
             }
             else 
             {
-              throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+              throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de modifier l'article</p>",
+              $this->render('Error.twig') 
+              );
             }
           }
           else 
           {
-            throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis</p>",
+              $this->render('Error.twig') 
+            );
           }       
       }
       catch(Exception $e) 
       { 
-        echo 'Erreur : ' . $e->getMessage();
+        echo $e->getMessage();
       }
     }
 
@@ -250,34 +278,61 @@ class ArticlesController
           {
             if(isset($params['id']) && ($params['id']) > 0)
             {
-              $updateArticle = $this->manager->updateArticle($params['id'], $params['title'], $params['content']);
-
-              if ($updateArticle === false) {
-                  throw new Exception("<p>Impossible de modifier l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+              $picture = $this->getPicture($params);
+              if($picture) 
+              {
+                $updateArticle = $this->manager->updateArticleWithPicture($params['id'], $params['title'], $params['content'], $picture);
+                if ($updateArticle === false) 
+                {
+                  throw new Exception(
+                    "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de modifier l'article</p>",
+                    $this->render('Error.twig') 
+                  );
+                } 
+                else 
+                {
+                  $this->redirect('admin');
+                }
               }
-              else {
-                $myView = new View('');
-                $myView->redirect('admin');
-              }    
+              else
+              {
+                $updateArticle = $this->manager->updateArticle($params['id'], $params['title'], $params['content']);
+                if ($updateArticle === false) 
+                {
+                  throw new Exception(
+                    "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de modifier l'article</p>",
+                    $this->render('Error.twig'));
+                } 
+                else 
+                {
+                  $this->redirect('admin');
+                }
+              }  
             }
             else
             {
-              throw new Exception("<p>Aucun identifiant de billet envoyé. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+              throw new Exception(
+                "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de billet envoyé.</p>",
+                $this->render('Error.twig'));
             }
           }
           else 
           {
-            throw new Exception("<p>Tous les champs ne sont pas remplis. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Tous les champs ne sont pas remplis.</p>",
+              $this->render('Error.twig'));
           }
         }
         else 
         {
-          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis</p>",
+              $this->render('Error.twig'));
         }
       }
       catch(Exception $e) 
       { 
-        echo 'Erreur : ' . $e->getMessage();
+        echo $e->getMessage();
       }
     }
 
@@ -296,54 +351,112 @@ class ArticlesController
 
             if ($deleteArticle === false) 
             {
-              throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+              throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de supprimer l'article.</p>",
+              $this->render('Error.twig'));
             } 
             else 
             {
-              $myView = new View();
-              $myView->redirect('admin');
+              $this->redirect('admin');
             }
           }
           else 
           {
-            throw new Exception("<p>Impossible de supprimer l'article. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de billet envoyé.</p>",
+              $this->render('Error.twig'));
           }
         }
         else 
         {
-          throw new Exception("<p>Vous n'avez pas les accès nécessaires. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis</p>",
+              $this->render('Error.twig'));
         }
       } 
       catch(Exception $e) 
       { 
-        echo 'Erreur : ' . $e->getMessage();
+        echo $e->getMessage();
       }  
     }
 
-    //COMMENTS
+    /////COMMENTS
+
       //CREATE
 
     public function addComment($params) 
     {
       extract($params);
-      $affectedLines = $this->manager->postComment($id, $author, $content);
+      
       try
       {
-        if ($affectedLines === false) {
-            throw new Exception("<p>Impossible d'ajouter le commentaire. Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+        if (isset($id) && $id > 0) 
+        {
+          if (!empty($author) && !empty($content)) 
+          {   
+            $affectedLines = $this->manager->postComment($id, $author, $content);
+            if ($affectedLines === false) 
+            {
+                throw new Exception(
+                "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible d'ajouter le commentaire.</p>",
+                $this->render('Error.twig'));
+            }
+            else 
+            {
+                $this->redirect('article/id/'. $id);
+            }
+          }
+          else 
+          {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Tous les champs ne sont pas complétés.</p>",
+              $this->render('Error.twig'));
+          }
         }
-        else {
-            $myView = new View();
-            $myView->redirect('article/'. $id);
-        }
+        else 
+        {
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de billet envoyé.</p>",
+              $this->render('Error.twig'));
+        }  
       }
       catch(Exception $e) 
       { 
-        echo 'Erreur : ' . $e->getMessage();
+        echo $e->getMessage();
       } 
     }
 
       //READ
+
+    public function getAllComments($params)
+    {
+      try
+      { 
+        if(isset($_SESSION['authentification']))
+        {
+          $comments = $this->manager->getAllComments();
+          $pageTitle = 'Gestion des commentaires';
+
+          $this->render('AdminCommentView.twig', array(
+            'pageTitle' => $pageTitle,
+            'comments' => $comments
+          ));
+
+          //$myView = new View('adminCommentView');
+          //$myView->render(array('comments' => $comments, 'pageTitle' => $pageTitle));
+        }
+        else 
+        {
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis</p>",
+              $this->render('Error.twig'));
+        }
+      }
+      catch(Exception $e)
+      {
+        echo $e->getMessage();
+      }  
+    }
 
     public function getComments($params)
     {
@@ -352,80 +465,169 @@ class ArticlesController
       return $comments;
     }
 
+      //UPDATE
 
-    //NEWSLETTER
+    public function acceptedComment ($params)
+    {
+      extract($params);
+      try 
+      {
+        if(isset($_SESSION['authentification']))
+        {
+          if(isset($id) && $id> 0) 
+          {
+            $updateComment = $this->manager->validComment($id);
+            if ($updateComment === true) 
+            {
+              $this->redirect('adminComment');
+            }
+            else 
+            {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de valider le commentaire.</p>",
+              $this->render('Error.twig'));
+            } 
+          }
+          else 
+          {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de commentaire envoyé.</p>",
+              $this->render('Error.twig'));
+          }
+        }
+        else 
+        {
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis.</p>",
+              $this->render('Error.twig') 
+          );
+        }
+      }      
+      catch(Exception $e)
+      {
+        echo $e->getMessage();
+      }
+        
+    }
+
+    public function signaledComment ($params)
+    {
+      extract($params);
+      try 
+      {
+        if(isset($id) && $id > 0) 
+        {
+          $updateComment = $this->manager->warningComment($id);
+          $pageTitle = 'Commentaire signalé';
+          if ($updateComment === false) 
+          {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de signaler le commentaire.</p>",
+              $this->render('Error.twig'));
+          }
+          else 
+          {
+            $this->render('SuccessView.twig', array(
+                  'pageTitle' => $pageTitle
+              ));
+            //$myView = new View('successView');
+            //$myView->render(array('pageTitle' => $pageTitle));
+          }
+        }
+        else 
+        {
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de commentaire envoyé.</p>",
+              $this->render('Error.twig'));
+          
+        }
+      }
+        
+      catch(Exception $e)
+      {
+        echo $e->getMessage();
+      }
+    }
+
+      //DELETE
+
+    public function deleteComment($params)
+    {
+      extract($params);
+      try
+      {
+        if(isset($_SESSION['authentification']))
+        {
+          if (isset($id) && $id> 0) 
+          {
+            $deleteComment = $this->manager->deleteComment($id);
+            if ($deleteComment === false) 
+            {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Impossible de supprimer le commentaire</p>",
+              $this->render('Error.twig'));
+            } 
+            else 
+            {
+              $this->redirect('adminComment');
+            }
+          }
+          else 
+          {
+            throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Aucun identifiant de commentaire envoyé.</p>",
+              $this->render('Error.twig'));
+          }
+        }
+        else 
+        {
+          throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Vous n'avez pas les accès requis.</p>",
+              $this->render('Error.twig') 
+          );
+        }
+      } 
+      catch(Exception $e)
+      {
+        echo $e->getMessage();
+      }
+    }
+
+
+    /////NEWSLETTER
 
     public function subscribeNewsletter($params)
     {
-      extract($params);
+       extract($params);
 
-      $subscribe = $this->newsletter->addNewsletter($user_mail_newsletter);
+       if(isset($user_mail_newsletter) && !empty($user_mail_newsletter))
+       {
+           require_once('assets/MailChimp.php');        
 
-      try
-      {
-        if ((isset($user_mail_newsletter)) && $subscribe === true) {
+           $MailChimp = new MailChimp('57ae29c9e2a5187e4715136f78e673de-us20');
+           $list_id = 'd5f02829ed';
+
+           $email = htmlspecialchars($_POST['user_mail_newsletter']);
+
+           $result = $MailChimp->post("lists/$list_id/members", [
+                           'email_address' => $email,
+                           'status'        => 'subscribed',
+                       ]);
+
+           $is_subscribed = 1;
 
           $pageTitle = 'Succès';
 
-          $myView = new View('successView');
-          $myView->render(array('pageTitle' => $pageTitle));
-        }
-        else {
+          $this->render('SuccessView.twig', array(
+            'pageTitle' => $pageTitle
+          ));
 
-          throw new Exception("<p>Vous n'avez pas renseigné votre adresse mail</p>");
-        }
-      }
-      catch(Exception $e) 
-      { 
-        echo 'Erreur : ' . $e->getMessage();
-      }
-
-    }
-
-    public function unsubscribeNewsletter($params)
-    {
-      extract($params);
-
-      $unsubscribe = $this->newsletter->stopNewsletter($params);
-
-      $myView = new View('successView');
-      $myView->render();
-
-    }
-
-    public function sendNewsletter($params)
-    {
-      $subscribers = $this->newsletter->getSubscribers();
-
-      $articles = $this->manager->getLastArticles();
-
-      if ((isset($user_mail_newsletter)) && (filter_var($user_mail_newsletter, FILTER_VALIDATE_EMAIL))) 
-      {
-        while ($susbcriber = $subscribers->fetch()) {
-          $to = $subscriber;
-          $subject = "Nouveaux articles";
-          
-          while($article = $articles->fetch())
-            {
-              $myView = new View('NewsletterView');
-              $myView->render(array('article' => $article));
-            }
-          $header = "From : CDB \n";
-          mail($to, $subject, $article,$header);
-        }
-          
-          $pageTitle = 'Succès';
-
-          $myView = new View('successView');
-          $myView->render(array('pageTitle' => $pageTitle));
-
-        }
-        else
-        {
-          echo "Vous ne pouvez pas envoyer la newsletter";
-        }
-    }
-
-    //quand changement ou redirect myView->redirect('la page ou je veux redirect')
-    
+          //$myView = new View('successView');
+          //$myView->render(array('pageTitle' => $pageTitle));
+       }
+       else
+       {
+           $is_subscribed = 0;
+       }
+    } 
 }

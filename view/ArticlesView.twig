@@ -1,0 +1,103 @@
+{% extends "gabarit.twig" %}
+{% block content %}
+<div class="container">
+  <h2 class="title is-4">Derniers articles en ligne</h2>
+  <div class="columns">
+    <article class="column is-three-quarter" id="all_articles">
+      {% for article in articlesList %}
+      <!--<?php 
+        while ($article = $articlesList->fetch()) 
+        { 
+          if (strlen($article['content']) <= 200)
+          {
+            $content = $article['content'];
+          }
+          else
+          {
+            $begin = substr($article['content'], 0, 200);
+            $begin = substr($begin, 0, strrpos($begin, ' ')) . '...';
+            $content = $begin;
+          } 
+      ?>-->
+      <div class="article">
+        <div class="box">
+          <article class="media">
+            <div class="media-left">
+              {% if article.image == true %}
+                  <figure class="image is-128x128">
+                  <img src="{{WEB}}img/article_img/{{article.image}}"/>
+                  </figure>
+              {% endif %}
+            </div>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong class="title">{{article.title}}</strong><br>
+                  <small>Posté le {{article.date.create}}</small>
+                  <br>
+                  <p class="subtitle is-italic">Posté le {{article.date_create}}</p>
+                  {% if article.content|length <= 200 %}
+                    <p class="subtitle">{{article.content|raw}}</p>
+                  {% else %}
+                    <p class="subtitle">...</p>
+                  {% endif %}
+                  <br/>
+                  <a href="{{HOST}}article/id/{{article.id}}">Lire la suite</a>
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+        <br/>
+      </div>        
+      {% endfor %}
+      <div id="pagination">
+      <?php
+      for($i=1;$i<=$allPages;$i++) 
+      {
+        if($i == $currentPage) 
+        {
+          echo $i.' ';
+        } 
+        elseif ($i == $currentPage + 1) 
+        {
+          echo '<a class="next" href="'.$i.'">'.$i.'</a> ';
+        }
+        else 
+        {
+          echo '<a href="'.$i.'">'.$i.'</a> ';
+        }
+      }
+      ?>
+      <!-- fo i  .allPages 
+         i i  currentPage
+          loop.index  i }}
+        { elsei i  currentPage+1 %}
+          <a class="next" href="{{i}}">{{i}}</a>
+        { els }
+          <a href="{{i}}">{{i}}</a>
+      { en }-->
+      </div>
+    </article>
+    <div class="column is-one-quarter">
+      <p class="subtitle is-italic">Recevoir la newsletter</p>
+      <form action="{{HOST}}subscribe" method="post">
+        <div class="field">
+          <div class="control">
+            <input class="input is-primary" type="email" name="user_mail_newsletter" placeholder="Votre adresse e-mail">
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-info">S'inscrire!</button>
+          </div>
+        </div>
+      </form>
+    </div>       
+  </div> 
+  
+<script src="{{WEB}}js/jquery-ias.min.js"></script>
+<script src="{{WEB}}js/pagination.js"></script>
+</div>
+{% endblock %}
+

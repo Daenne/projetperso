@@ -4,8 +4,13 @@ include_once('config/Configuration.php');
 
 MyAutoLoad::start();
 
-$request = $_GET['r'];
+if (isset($_GET['r'])) {
+	$request = $_GET['r'];
+}
+else
+{
+	$request = null;
+}
 
 $routeur = new Routeur($request);
 $routeur->renderController();
-

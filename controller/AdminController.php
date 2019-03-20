@@ -1,6 +1,6 @@
 <?php
 
-class AdminController 
+class AdminController extends Controller
 {
 	protected $manager;
 
@@ -12,9 +12,12 @@ class AdminController
     public function showIndex($params)
     {
     	$pageTitle = 'Accueil';
+      $this->render('HomeView.twig', array(
+            'pageTitle' => $pageTitle
+        ));
 
-    	$myView = new View('HomeView');
-    	$myView->render(array('pageTitle' => $pageTitle)); 
+    	//$myView = new View('HomeView');
+    	//$myView->render(array('pageTitle' => $pageTitle)); 
     }
 
     public function showLogin($params) 
@@ -24,11 +27,15 @@ class AdminController
   		if(isset($_SESSION['authentification']))
   		{
 
-        $articlesList = $this->manager->getAdminIndex();
+        //$articlesList = $this->manager->getAdminIndex();
 
-  			$pageTitle = 'Administration';
-  			$myView = new View();
-        $myView->redirect('admin');
+        $this->redirect('admin');
+  			//$pageTitle = 'Administration';
+        //$this->render('AProposView.twig', array(
+        //      'pageTitle' => $pageTitle
+        //  ));
+  			//$myView = new View();
+        //$myView->redirect('admin');
   		}
   		else 
   		{
@@ -41,8 +48,11 @@ class AdminController
   			{	
   				$pageTitle = 'Login';
 
-    			$myView = new View('LoginView');
-    			$myView->render(array('pageTitle' => $pageTitle)); 
+          $this->render('LoginView.twig', array(
+                'pageTitle' => $pageTitle
+            ));
+    			//$myView = new View('LoginView');
+    			//$myView->render(array('pageTitle' => $pageTitle)); 
     			
   			}
   		}
@@ -50,20 +60,28 @@ class AdminController
 
   	public function showAdmin($params) 
   	{
-  		//var_dump($params);
   		if (isset($_SESSION['authentification'])) 
         {
-           	$articlesList = $this->manager->getAdminIndex();
-  			$pageTitle = 'Administration';
+          $articlesList = $this->manager->getAdminIndex();
+          //$articlesList->fetch(); 
+          $tinyKey = 'vf59xyjgxn48ibyemdd9z3bljo7vnd99c667lokvdam3ykfi';
 
-    		$myView = new View('AdminView');
-    		$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
+  			  $pageTitle = 'Administration';
+          $this->render('AdminView.twig', array(
+                'pageTitle'   => $pageTitle,
+                'articlesList'=> $articlesList,
+                'tinyKey' => $tinyKey
+            ));
+
+    		  //$myView = new View('AdminView');
+    		  //$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
         }
         else 
         {
-        	$pageTitle = 'Login';
-  			$myView = new View();
-            $myView->redirect('login');
+        	//$pageTitle = 'Login';
+          $this->redirect('login');
+  			  //$myView = new View();
+          //$myView->redirect('login');
         } 
   	}
 
@@ -82,20 +100,27 @@ class AdminController
 
 	        if (($isPseudoCorrect == 0) AND ($isPasswordCorrect == 0)) 
 	        {
-	            $_SESSION['authentification'] = true;
-	            $pageTitle = 'Administration';
+	          $_SESSION['authentification'] = true;
+	          $pageTitle = 'Administration';
+            $this->render('AdminView.twig', array(
+                  'pageTitle'    => $pageTitle,
+                  'articlesList' => $articlesList
+              ));
 	            
-	          	$myView = new View('AdminView');
-	    		$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle));   
+	          //$myView = new View('AdminView');
+	    		  //$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle));   
 
 	        }
 	        else {
-	           throw new Exception("<p>Pseudo et/ou mot de passe incorrect(s). Retour à la page d'accueil <a href=\"home\">ici</a></p>");
+	           throw new Exception(
+              "<br/><p class=\"container has-text-centered has-text-weight-bold\">Pseudo et/ou mot de passe incorrect(s). Retour à votre page <a href=\"login\">ici</a></p>",
+              $this->render('Error.twig') 
+             );
 	        }
   		}
   		catch(Exception $e) 
 		{ 
-		    echo 'Erreur : ' . $e->getMessage();
+		    echo $e->getMessage();
 		}
         
     }
