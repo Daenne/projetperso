@@ -15,9 +15,6 @@ class AdminController extends Controller
       $this->render('HomeView.twig', array(
             'pageTitle' => $pageTitle
         ));
-
-    	//$myView = new View('HomeView');
-    	//$myView->render(array('pageTitle' => $pageTitle)); 
     }
 
     public function showLogin($params) 
@@ -26,16 +23,7 @@ class AdminController extends Controller
 
   		if(isset($_SESSION['authentification']))
   		{
-
-        //$articlesList = $this->manager->getAdminIndex();
-
         $this->redirect('admin');
-  			//$pageTitle = 'Administration';
-        //$this->render('AProposView.twig', array(
-        //      'pageTitle' => $pageTitle
-        //  ));
-  			//$myView = new View();
-        //$myView->redirect('admin');
   		}
   		else 
   		{
@@ -51,9 +39,6 @@ class AdminController extends Controller
           $this->render('LoginView.twig', array(
                 'pageTitle' => $pageTitle
             ));
-    			//$myView = new View('LoginView');
-    			//$myView->render(array('pageTitle' => $pageTitle)); 
-    			
   			}
   		}
   	}
@@ -63,7 +48,7 @@ class AdminController extends Controller
   		if (isset($_SESSION['authentification'])) 
         {
           $articlesList = $this->manager->getAdminIndex();
-          //$articlesList->fetch(); 
+
           $tinyKey = 'vf59xyjgxn48ibyemdd9z3bljo7vnd99c667lokvdam3ykfi';
 
   			  $pageTitle = 'Administration';
@@ -72,16 +57,10 @@ class AdminController extends Controller
                 'articlesList'=> $articlesList,
                 'tinyKey' => $tinyKey
             ));
-
-    		  //$myView = new View('AdminView');
-    		  //$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle)); 
         }
         else 
         {
-        	//$pageTitle = 'Login';
           $this->redirect('login');
-  			  //$myView = new View();
-          //$myView->redirect('login');
         } 
   	}
 
@@ -106,10 +85,6 @@ class AdminController extends Controller
                   'pageTitle'    => $pageTitle,
                   'articlesList' => $articlesList
               ));
-	            
-	          //$myView = new View('AdminView');
-	    		  //$myView->render(array('articlesList' => $articlesList, 'pageTitle' => $pageTitle));   
-
 	        }
 	        else {
 	           throw new Exception(
@@ -119,10 +94,9 @@ class AdminController extends Controller
 	        }
   		}
   		catch(Exception $e) 
-		{ 
+		  { 
 		    echo $e->getMessage();
-		}
-        
+		  }    
     }
 
     public function endAdmin($params)

@@ -17,7 +17,6 @@
     <div class="column is-one-third">
       <div class="tile is-ancestor">
         <div class="tile is-parent is-vertical">
-
           <div class="tile is-child box">
             <h3 class="title is-6">Ajouter un commentaire : </h3>
             <form action="{{HOST}}addComment/id/{{article.id}}" method ="post">
@@ -48,8 +47,6 @@
     <div class="column">
       <h3 class="title is-6">Commentaires : </h3>
         {% for comment in comments %}
-         <!-- while ($comment = $comments->fetch()){
-        ?>-->
       <div class="box">
           <p class="subtitle has-text-weight-bold">{{comment.author|striptags}}</p>
           <p class="subtitle is-size-7 is-italic">le {{comment.comment_date_fr}}</p>

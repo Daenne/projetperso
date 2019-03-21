@@ -10,7 +10,7 @@ class Routeur extends Controller
                         "home"     => ["controller" => 'HomeController',     "method" =>'showHome'], 
                         "articles" => ["controller" => 'ArticlesController', "method" => 'showArticles'],
 
-                            "subscribe"      => ["controller" => 'ArticlesController', "method" => 'subscribeNewsletter'],
+                            "subscribe"      => ["controller" => 'NewsletterController', "method" => 'subscribeNewsletter'],
 
                             "article"        => ["controller" => 'ArticlesController', "method" => 'showOneArticle'],
                             "write"          => ["controller" => 'ArticlesController', "method" => 'addArticle'],
@@ -50,8 +50,6 @@ class Routeur extends Controller
     {
         $params = null;
 
-        //extract $_GET
-
         $elements = explode('/', $this->request);
         unset($elements[0]);
 
@@ -60,8 +58,6 @@ class Routeur extends Controller
             $params[$elements[$i]] = $elements[$i+1];
             $i++;
         }
-
-        //extract $_POST
 
         if ($_POST) {
            foreach ($_POST as $key => $value) {
@@ -76,7 +72,6 @@ class Routeur extends Controller
         $route = $this->getRoute();
         $params = $this->getParams();
 
-    //$request = $this->request;
         try
         {
             if(key_exists($route, $this->routes)) 
@@ -91,15 +86,13 @@ class Routeur extends Controller
             {
                 throw new Exception(
                     "<br/><p class=\"container has-text-centered has-text-weight-bold\"><span class=\"is-size-1\">404</span><br/>Retour à la page d'accueil <a href=\"home\">ici</a></p>",
-                    $this->render('Error.twig') 
-            );   
+                    $this->render('Error.twig'));   
             }
         }
         catch(Exception $e)
         {
             echo $e->getMessage();
         }
-
 	}
 }
 

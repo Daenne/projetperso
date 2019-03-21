@@ -4,11 +4,11 @@ var ias = jQuery.ias({
         pagination: '#pagination',
         next:       '.next'
       });
-      ias.extension(new IASSpinnerExtension());
-      ias.extension(new IASNoneLeftExtension({
-          text: "Plus aucun article à charger..."
-      }));
-      ias.extension(new IASTriggerExtension({
-          text: "Afficher plus d'articles",
-          offset: 3
-      }));
+  ias.extension(new IASSpinnerExtension());
+  ias.extension(new IASNoneLeftExtension({
+    text: "Plus aucun article à charger..."
+  }));
+  ias.extension(new IASTriggerExtension({
+    text: "Afficher plus d'articles",
+    offset: 3
+  }));

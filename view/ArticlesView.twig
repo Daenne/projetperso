@@ -5,77 +5,43 @@
   <div class="columns">
     <article class="column is-three-quarter" id="all_articles">
       {% for article in articlesList %}
-      <!--<?php 
-        while ($article = $articlesList->fetch()) 
-        { 
-          if (strlen($article['content']) <= 200)
-          {
-            $content = $article['content'];
-          }
-          else
-          {
-            $begin = substr($article['content'], 0, 200);
-            $begin = substr($begin, 0, strrpos($begin, ' ')) . '...';
-            $content = $begin;
-          } 
-      ?>-->
       <div class="article">
-
         <div class="card">
           <div class="card-image">
-            <!--<div class="media-left">-->
               {% if article.image == true %}
                   <figure class="image is-16by9">
                   <img src="{{WEB}}img/article_img/{{article.image}}"/>
                   </figure>
               {% endif %}
           </div>
-            <div class="card-content">
-              <div class="content">
-                <p>
-                  <strong class="title">{{article.title}}</strong><br>
-                  <small class="is-italic">Posté le {{article.date_create}}</small>
-                  {% if article.content|length <= 200 %}
-                    <p class="subtitle">{{article.content|raw}}</p>
-                  {% else %}
-                    <p class="subtitle">...</p>
-                  {% endif %}
-                  <a href="{{HOST}}article/id/{{article.id}}">Lire la suite</a>
-                </p>
-              </div>
+          <div class="card-content">
+            <div class="content">
+              <p>
+                <strong class="title">{{article.title|striptags}}</strong><br>
+                <small class="is-italic">Posté le {{article.date_create}}</small>
+                {% if article.content|length <= 200 %}
+                  <p class="subtitle">{{article.content|raw}}</p>
+                {% else %}
+                  <p class="subtitle">...</p>
+                {% endif %}
+                <a href="{{HOST}}article/id/{{article.id}}">Lire la suite</a>
+              </p>
             </div>
-          <!--</div>-->
+          </div>
         </div>
-
         <br/>
       </div>        
       {% endfor %}
       <div id="pagination">
-      <?php
-      for($i=1;$i<=$allPages;$i++) 
-      {
-        if($i == $currentPage) 
-        {
-          echo $i.' ';
-        } 
-        elseif ($i == $currentPage + 1) 
-        {
-          echo '<a class="next" href="'.$i.'">'.$i.'</a> ';
-        }
-        else 
-        {
-          echo '<a href="'.$i.'">'.$i.'</a> ';
-        }
-      }
-      ?>
-      <!-- fo i  .allPages 
-         i i  currentPage
-          loop.index  i }}
-        { elsei i  currentPage+1 %}
-          <a class="next" href="{{i}}">{{i}}</a>
-        { els }
-          <a href="{{i}}">{{i}}</a>
-      { en }-->
+        {% for i in 1..allPages %}
+          {% if i == currentPage %}
+            {{i}}
+          {% elseif i == currentPage + 1 %}
+            <a class="next" href="{{i}}">{{i}}</a>
+          {% else %}
+            <a href="{{i}}">{{i}}</a>
+          {% endif %}
+        {% endfor %}        
       </div>
     </article>
     <div class="column is-one-quarter">

@@ -31,9 +31,7 @@ class ArticlesManager extends Connexion
     {
         $allArticlesReq = $this->db->query('SELECT * FROM articles ORDER BY id DESC');
         $allArticles = $allArticlesReq->rowCount();
-
         $allPages = ceil($allArticles/$this->articlesPerPage);
-
         return $allPages;
     }
 
@@ -42,18 +40,6 @@ class ArticlesManager extends Connexion
         $sql = 'SELECT * FROM articles ORDER BY id DESC LIMIT ' .($currentPage-1)*$this->articlesPerPage . ',' . $this->articlesPerPage;
         $request = $this->db->prepare($sql);
         $request->execute();
-        //while($row = $request->fetch(PDO::FETCH_ASSOC))
-        //{
-
-        //    $id = $row['id'];
-        //    $title = $row['title'];
-        //    $content = $row['content'];
-        //    $date_create = $row['date_create'];
-        //    $image = $row['image'];
-
-        //return $row;
-        //} 
-
         return $request;
     }
 
@@ -161,6 +147,6 @@ class ArticlesManager extends Connexion
         $request = $this->db->prepare('DELETE FROM comments WHERE id =:id');
         $request->bindValue(':id', (int) $id, PDO::PARAM_INT);
         $deleteComment = $request->execute();
-        return $deleteArticle;
+        return $deleteComment;
     }
 }

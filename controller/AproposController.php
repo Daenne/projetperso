@@ -10,8 +10,5 @@ class AProposController extends Controller
     	$this->render('AProposView.twig', array(
             'pageTitle' => $pageTitle
         ));
-
-        //$myView = new View('AproposView');
-        //$myView->render(array('pageTitle' => $pageTitle));
     }
 }

@@ -9,9 +9,5 @@ class ProjetsController extends Controller
     	$this->render('ProjetsView.twig', array(
             'pageTitle' => $pageTitle
         ));
-
-
-        //$myView = new View('ProjetsView');
-        //$myView->render(array('pageTitle' => $pageTitle));
     }
 }

@@ -6,7 +6,6 @@ class Controller
 {
 	protected $table = [
 		"HOST" => HOST,
-        "VIEW" => VIEW,
 		"WEB" => WEB
 	];
 
@@ -21,6 +20,5 @@ class Controller
     public function redirect($route) {
 
 		header('Location:' . HOST . $route);
-
 	}
 }

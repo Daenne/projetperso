@@ -9,9 +9,5 @@ class HomeController extends Controller
     $this->render('HomeView.twig', array(
       'pageTitle' => $pageTitle,
     ));
-
-
-    //$myView = new View('HomeView');
-    //$myView->render(array('pageTitle' => $pageTitle)); 
   }
 }

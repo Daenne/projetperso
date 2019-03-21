@@ -30,25 +30,10 @@
       </p>        
     </div>
   </form><br/>
-
-  <!--<?php 
-    while ($article = $articlesList->fetch()) { 
-
-      if (strlen($article['content']) <= 200)
-      {
-        $content = $article['content'];
-      }
-      else
-      {
-        $begin = substr($article['content'], 0, 200);
-        $begin = substr($begin, 0, strrpos($begin, ' ')) . '...';
-        $content = $begin;
-      } 
-  ?>-->
   {% for article in articlesList %}
   <div class="card">
     <header class="card-header">
-      <p class="card-header-title">{{article.title}}</p>
+      <p class="card-header-title">{{article.title|striptags}}</p>
     </header>
     <div class="card-image">
         {% if article.image == true %}  

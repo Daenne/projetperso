@@ -12,12 +12,11 @@ class MyAutoLoad
     $root = $_SERVER['DOCUMENT_ROOT'];
     $host = $_SERVER['HTTP_HOST'];
 
-    define("HOST", 'http://' . $host . '/projet5/');
-    define("ROOT", $root . '/projet5/');
+    define("HOST", 'http://' . $host .'/');
+    define("ROOT", $root. '/');
 
     define("CONTROLLER", ROOT . 'controller/');
     define("MODEL", ROOT . 'model/');
-    define("VIEW", ROOT . 'view/');
     define("WEB", HOST . 'web/');
     define("CLASSES", ROOT .'classes/');
   }
